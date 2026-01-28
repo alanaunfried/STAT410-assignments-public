@@ -1,0 +1,282 @@
+---
+title: "Lab 1 Introduction to R and Correlation"
+format:
+  docx:
+    embed-resources: true
+    number-sections: true
+date: "`r Sys.Date()`"
+---
+
+## Name: PUT YOUR NAME HERE
+
+------------------------------------------------------------------------
+
+<!-- Use these arrows and dashes to add a text comment that won't appear in the rendered file. This is different than a comment that goes in a code chunk, where you would use # -->
+
+<!-- The *** creates a small line to separate sections of your document -->
+
+<!-- While working on your lab, it might be easier to output to HTML instead of word. In the YAML in line 4, you can change "docx:" to "html:".  Just make sure to change it back to "html:" when rendering your final file to submit! -->
+
+**Please make sure to show all R code and output after each question so that I can see your work.**
+
+Write a sentence for each numerical value produced describing its meaning **in context with the proper units**.
+
+**Be sure to follow all style guide suggestions (this may include fixing provided code)**
+
+Be sure to submit **A ZIPPED FOLDER** that includes the .Rproj, data, rendered Word document and the Quarto (.qmd) file. (Remember, submitting a document that doesn't render is preferable to not submitting anything!) And **also** submit the rendered word document separately for easier Canvas grading.
+
+You must submit your homework individually. This is not a group assignment. However, I encourage you to collaborate with your peers and form study groups to learn together. I should not see any direct copying from a peer's work; writing comments and code is like writing an essay, it should be unique to the individual.
+
+------------------------------------------------------------------------
+
+## Get Started
+
+Let's get started with R and Quarto! First, for more details, check out this [Quarto Tutorial](https://quarto.org/docs/get-started/hello/rstudio.html).
+
+Whenever you create a new Quarto file a "setup" code chunk will generate automatically (see below). This chunk allows you to specify formatting standards for the whole document. You will not see this chunk once you render the document because `include=FALSE`. I like to modify the base code with `comment = ""` so that R code output does not have `###` in front of it.
+
+In the setup chunk, I also load any packages I plan to use the document.
+
+```{r}
+#| label: setup
+#| include: false
+#| error: true
+#setup is the name of this R chunk. You can name all of your R chunks if you would like
+#note error=TRUE will allow your quarto file to render even if you have an error somewhere! This is not always preferable, but for labs will allow you to submit your work even if you got stuck somewhere. The default in R is error=FALSE.
+knitr::opts_chunk$set(echo = TRUE, 
+                      comment = "", 
+                      message = FALSE, 
+                      warning = FALSE)
+
+#Tidyverse is used for data manipulation and management
+library(tidyverse)
+#Mosaic has clean, simplified versions of functions for introductory statistics topics
+library(mosaic)
+#ggformula is useful for plots, but you can also use ggplot if you took 210 or 310
+library(ggformula)
+```
+
+# Part 1
+
+We will be exploring census data from 1990. Here are the variables provided:
+
+-   Age: Years
+
+-   Workclass: Private, Self-emp-not-inc, Self-emp-inc, Federal-gov, Local-gov
+
+-   Education: Bachelors, Some-college, 11th, HS-grad, Prof-school, Assoc-acdm, Assoc-voc
+
+-   YearsEducation: Years
+
+-   MaritalStatus: Married-civ-spouse, Divorced, Never-married, Separated, Widowed
+
+-   Occupation: Tech-support, Craft-repair, Other-service, Sales
+
+-   Relationship: Wife, Own-child, Husband, Not-in-family, Other-relative, Unmarried
+
+-   Race: White, Asian-Pac-Islander, Amer-Indian-Eskimo, Other, Black
+
+-   Sex: Female, Male
+
+-   WorkTime: Hours per Week
+
+-   Native: United-States, Cambodia, England, Puerto-Rico, Canada, Germany
+
+-   Salary: greater than 50k, less than or equal to 50k
+
+In order to load data into a Quarto file so that it knits correctly, you must specify the exact pathway to the data. It is much easier if you are working in a project for each lab so that the file pathway is short; if the data is in the exact same folder as your code, you can reference the name of the dataset directly without having to add any additional path.
+
+**Modify** the code below to read in the `1990census.csv` data. Remember, you can test a code chunk by running it in the chunk without knitting the whole document.
+
+```{r}
+census <- read.csv("filename.csv")
+```
+
+We have now created a **dataframe** called `census`. Next we will look at how we can extract information from columns/variables in the data frame.
+
+## Conceptual Questions
+
+Here are a couple questions to practice conceptual content. The following code might help with your answers. It also might help to look at the variables the Environment tab in the upper right corner of RStudio, or to open the dataset in spreadsheet form (click on the dataset name in the Environment tab).
+
+```{r}
+tally(~Education, data = census)
+df_stats(~WorkTime, data = census)
+tally(~MaritalStatus, data = census)
+```
+
+What variable type is Education? Select one (nominal, ordinal, discrete, continuous) and explain your answer.
+
+> TYPE YOUR ANSWER HERE
+
+What variable type is WorkTime? Select one (nominal, ordinal, discrete, continuous) and explain your answer.
+
+> TYPE YOUR ANSWER HERE
+
+What variable type is Marital Status? Select one (nominal, ordinal, discrete, continuous) and explain your answer.
+
+> TYPE YOUR ANSWER HERE
+
+## Summary Function
+
+One way to get a quick overview of the data is to use the `summary()` function. With the whole data set named in the function you will get a summary for each variable in the data set.
+
+```{r}
+summary(census)
+```
+
+Once the data is loaded you will have to "call" the variables for use in each function, making sure to reference the dataset as well. If you just want the summary for a single variable in the data, consider if the variable is numerical or categorical and use an appropriate summary function based on the type of data.
+
+```{r}
+#df_stats from the mosaic package summarizes a numerical variable
+df_stats(~Age, data = census)
+
+#tally from the mosaic package summarizes a categorical variable
+tally(~Education, data = census)
+tally(~Education, data = census, format = "percent")
+```
+
+**Insert a code chunk below and write the code to find summary statistics for `Salary`**
+
+# Part 2
+
+Now onto building some descriptive statistics and graphics with the `1990Census` data. We are going to focus our analysis on a comparison of salaries with the other variables of interest.
+
+## Bar Graph
+
+Notice that `Salary` is categorized as either greater than 50,000/year and equal to or less than 50,000. Below is code to create a bar graph of the salaries. Add a comment to the code to indicate what it does, and modify the code to add labels to the graph axes.
+
+```{r}
+#comment here
+gf_percents(~Salary, data = census) #don't forget to add axis labels!
+
+```
+
+## Salary Distribution
+
+Look at the frequency distribution based on the bar graph. Describe the salary distribution among US residents in 1990. *Note this is a categorical variable, so we do NOT mean shape,center, and spread! Instead, describe which group has more or less responses and the rough percentage that fall into each group.*
+
+> TYPE YOUR ANSWER HERE
+
+## Histogram
+
+Now we are going to observe the influence of other factors on the frequency distribution of the Salary. Consider the two variables Age and Salary. Create a histogram of Age. Reference the R Mosaic cheat sheet (via RStudio Resources page on Canvas) if you need help with the code (`binwidth` and `center` function arguments are not required, but you can play around with them if you want). Be sure to label the graph axes appropriately.
+
+```{r}
+#insert code
+```
+
+## Mean SD
+
+Calculate the mean and standard deviation of Age, and store each quantity as a separate object using the `<-` operator. (The Mosaic cheat sheet might help you again!)
+
+```{r}
+m_age <- mean(~Age, data = census)
+#complete the code for standard deviation
+```
+
+Did you know you can write R code outside of a code chunk? Within the white text, you can write what is called "inline" code using the notation in the example below. The benefit is that you do not need to copy or write numbers yourself; R calculates the automatically for you. Use the named objects that you created for mean and standard deviation and write a description of each value with the R output inline.
+
+Example: The mean age of all people in the 1990 census is `r m_age` years.
+
+> Provide verbal interpretation of the standard deviation in the context of the problem
+
+## Boxplot
+
+Create a boxplot comparing the two different salary groups' age distributions. Make sure to include axis labels. (Again the Mosaic cheat sheet might help!)
+
+```{r}
+#insert code   
+```
+
+Based on the plots, how might age affect which salary group a person might fall?
+
+> Provide verbal interpretation of the boxplots in the context of the problem
+
+## Mean by Group
+
+Try the following code for calculating the average age for each salary group. Then adapt it (write a new line of code) to calculate the median split by Salary group as well.
+
+```{r}
+#na.rm=TRUE tells R to remove any rows of data that are missing the Age or Salary data; missing data can cause the function to return an NA or no value, so removing any missing data is sometimes necessary for the function to work. 
+mean(Age ~ Salary, data = census, na.rm = TRUE)
+
+```
+
+What happens if you reverse the order of Age and Salary in the previous code chunk? Does the order of the model statement matter? Explain.
+
+> TYPE YOUR ANSWER HERE
+
+# Part 3
+
+Now you try. Use your knowledge of R and Quarto and extend your analysis to include *other* variables such as `WorkTime`, or `Education`. Be creative, but keep in mind the goal that you want to explore factors that impact salary level. Provide all code, output, and interpretations within this section of the document. *Be sure to include summary stats, graphics, and interpretations.*
+
+**Start adding code chunks and interpretations here**
+
+# Part 4
+
+Write a summary paragraph describing your findings about Salary among individuals in 1990 and the trends among those in each Salary group. Support your summary with evidence from the previous exercises.
+
+> TYPE YOUR ANSWER HERE
+
+# Part 5
+
+## Scatterplot and Correlation
+
+Are age and worktime correlated? Is there a relationship between a person's age and how many hours they work each week? Create a scatterplot, and calculate the correlation to study this relationship below.
+
+```{r}
+#Scatterplot
+
+
+```
+
+```{r}
+#Correlation
+
+
+```
+
+## Hypothesis Test for Correlation
+
+Conduct a hypothesis test for the correlation between Age and WorkTime.
+
+```{r}
+#Hypothesis Test
+
+```
+
+Write a conclusion to the hypothesis test in the context of the problem. You can follow this generic format: "With a test statistic of \_\_\_\_ and a p-value of \_\_\_\_, we (fail to reject or reject) the null hypothesis. We have \_\_\_\_\_\_\_\_\_\_\_ (give the strength of evidence, see class slides or handout for a reminder of the scale) evidence to suggest there is a linear correlation between Age and WorkTime." Remember, reject the null hypothesis is the p-value is below the significance level; we usually use a significance level of 0.05.
+
+> TYPE YOUR ANSWER HERE
+
+Is the result of the hypothesis test for correlation *statistically discernible (significant)*? Is it *practically significant*? Explain. If you answered yes for one question and not for the other, is there anything that you might explain the discrepancy?
+
+> TYPE YOUR ANSWER HERE
+
+## Correlation Matrix
+
+Consider the correlations between age, worktime, and years of education. Create a scatterplot matrix and calculate a correlation matrix showing all pairwise correlations between these three variables.
+
+```{r}
+#scatterplot matrix
+
+
+#correlation matrix
+ 
+```
+
+Which pair of variables has the largest correlation? List the variables and their correlation here.
+
+> TYPE YOUR ANSWER HERE
+
+# Style Guide
+
+In the CSUMB Statistics Program, we have an [R Code Style Guide](https://docs.google.com/document/d/15ZfjEHtaRMPpXQHsPZoC67AfTPRZc6VuvAvRiAtfyqo/edit?usp=sharing) that we use to make our code consistent and readable to us and others.
+
+Note the rubric in Canvas for how this assignment is graded: in incorporates the style guide!
+
+Throughout the document, implement any of the style guide recommendations possible. If there are style guide recommendations you cannot implement, list them here:
+
+> TYPE YOUR ANSWER HERE
+
+All done! Make sure to render your file as a word doc, and submit your ZIPPED, full R project to Canvas, along with the separate word doc.
