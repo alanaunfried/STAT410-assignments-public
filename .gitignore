@@ -5,7 +5,7 @@
 
 #ignore the overall rproject file tied to the repo
 
-STAT410-materials-public.Rproj
+STAT410-assignments-public.Rproj
 
 #ignore the destop.ini files from any subdirectory
 **/desktop.ini
