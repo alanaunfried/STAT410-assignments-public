@@ -1,0 +1,551 @@
+---
+title: 'Lab 2: Simple Linear Regression'
+format:
+  docx:
+    embed-resources: true
+    number-sections: true
+date: "`r Sys.Date()`"
+
+---
+
+## Name:
+
+***
+<!-- Use these arrows and dashes to add a text comment that won't appear in the knitted file. This is different than a comment that goes in a code chunk, where you would use # -->
+
+<!-- The *** creates a small line to separate sections of your document -->
+
+<!-- While working on your lab, it might be easier to output to HTML instead of word. In the YAML in line 4, you can change "docx:" to "html:".  Just make sure to change it back to "html:" when rendering your final file to submit! -->
+
+**Please make sure to show all R code and output after each question so that I can see your work.**  Write a sentence for each numerical value produced describing its meaning **in context with the proper units**.
+
+```{r}
+#| label: setup
+#| include: false
+#| error: true
+
+#note error=TRUE will allow your quarto file to render even if you have an error somewhere! This is not always preferable, but for labs will allow you to submit your work even if you got stuck somewhere. The default in R is error=FALSE.
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      comment = "", 
+                      message = FALSE, 
+                      warning = FALSE)
+#load common packages
+library(mosaic)
+library(ggformula)
+library(tidyverse)
+
+#janitor package will help us clean up variable names
+library(janitor)
+```
+
+# Part 1
+
+We wish to build a model to predict the the time (in minutes) to commute to work in Atlanta, GA based on the distance (in miles).  The data for commute time and distance for a random sample of 500 commuters from Atlanta is found in `commute_atl` in the Lock5Data library. Read in the data.
+
+```{r}
+#| label: CommuteAtlanta
+#| message: false
+#| warning: false
+#Note- you might need to install these packages first if you don't already have them.
+library(Lock5Data)
+
+#If you un-comment the following code, it will pull up the help file about the Lock5Data R package, and you can see all the datasets included
+# ?`Lock5Data-package`
+
+#read in the dataset from the R package with the data function
+data(CommuteAtlanta)
+
+#Note that the following code also reads in the data, but it directly references the package in which the data is stored to make sure we are loading the correct dataset. You can use either the above or below line of code to load the data. 
+# data(Lock5Data::commute_atl)
+
+#Don't forget to use the janitor package to clean up the variable names! Use the commute_atl dataset from now on
+commute_atl <- CommuteAtlanta |> clean_names()
+```    
+
+## Summary Stats 
+     
+Provide the relevant summary statistics for the study (mean and sd of each relevant variable, scatterplot, correlation) for `Distance` and `Time`. Label all graphics appropriately. 
+    
+```{r}
+#| label: sumstats_atl
+#| fig-width: 5
+#| fig-height: 4
+#For a code chunk, you can set how big you want the images to be with fig.width and fig.height. Default is inches.
+
+#Here is some code to get you started
+#names(commute_atl)
+
+#summary statistics
+df_stats(~distance, data = commute_atl)
+
+#Provide more R code and output here
+
+```  
+
+Here is an example of how you can use LaTeX commands to write equations. 
+
+$\hat{y}_{CO} = 3.2 + 3.3*x_{Tar}$.
+
+Here is an example of inline code. The mean of Distance is `r mean(~distance, data=commute_atl)` miles.  
+
+Provide an interpretation of the summary statistics (specifically the scatterplot and correlation). Based on summary statistics and plots, is there evidence of a linear relationship?
+
+> Insert Answer Here.
+
+## Fit the Model        
+
+Fit a linear regression model to predict Commute Time based on Distance in Atlanta by following the steps below. 
+
+### Find the regression model
+
+Find the regression model using R.  Write out the model in $y=\beta_0+\beta_1*x$ format, plugging in the $\beta$ estimates. Provide a scatterplot with the regression line added to the plot.  
+                
+```{r}
+#| label: lm_atl
+#Calculate the linear model
+
+#Provide R code and output/graphs  
+
+
+```
+
+> Insert Answer Here  
+              
+            
+### Slope Interpretation
+
+Interpret the slope in the context of the situation.  
+
+> Insert Answer Here 
+  
+
+### Intercept Intepretation
+
+Interpret the y-intercept in the context of the situation. Is the interpretation practical in context?  
+
+> Insert Answer Here 
+           
+## Hypothesis Test for Slope
+
+Conduct the test to determine if the linear relationship is statistically significant by following these steps.
+    
+### Hypotheses
+
+Set up the appropriate null and alternative hypotheses both verbally and symbolically. 
+        
+$H_0:\beta_1 = 0$ 
+
+> Verbally:  
+            
+$H_a:\beta_1 \neq 0$   
+
+> Verbally: 
+             
+        
+### Test Statistics
+
+Use R to find the ANOVA table and/or t-test statistics to test the hypothesis test.  
+                            
+```{r}
+#Put Code and output Here
+
+```    
+            
+### P-value interpretation
+
+Interpret the meaning of the appropriate p-value in the context of the situation.  
+        
+> Insert Answer Here         
+        
+### HT Conclusion
+
+State the conclusion of the hypothesis test in the context of the problem.
+        
+> Insert Answer Here 
+        
+## Coefficient of Determination
+
+Interpret the $R^2$ (coefficient of determination) value in the context of the model variables.   
+        
+> Insert Answer Here 
+
+## Assumptions
+
+We must determine whether the results of the analysis are trustworthy, i.e., the assumptions to perform the Regression Analysis are met by the data. 
+
+### Normality
+
+Provide and interpret the results of the QQPlot and Shapiro-Wilk Test to determine if the normality of residuals is a satisfied assumption.  
+    
+```{r}
+#Put code and output here
+
+```   
+    
+> Insert Answer Here      
+
+### Equal Variance
+
+Provide and interpret the Residual Plot to test Equal Variance of the residuals.  
+    
+```{r}
+#Put code and output here
+```   
+
+> Insert Answer Here   
+  
+
+### Independence of Residuals
+
+Interpret the results of the Residual Plot to test the Independence of Residuals assumption.  
+
+> Insert Answer Here   
+
+### Outliers
+
+Provide and interpret the Cook's distance plot to test if there are outliers in the data.  
+        
+```{r}
+#Put code and output here
+```  
+            
+> Insert Answer Here   
+ 
+          
+### Assumptions Conclusion
+
+After assessing all assumptions, do you have any concerns about the analysis?   
+
+> Insert Answer Here    
+ 
+      
+          
+# Part 2
+We are going to try and predict a student's GPA in College based on their SAT score.  The data is found in  `StudentSurvey` in the Lock5Data library.  First we are going to look at a model that examines `GPA` and `VerbalSAT`
+
+```{r}
+#| label: StudentSurvey
+#| message: false
+#load the data
+data(Lock5Data::StudentSurvey) 
+
+#clean the variable names
+student_data <- StudentSurvey |>
+  clean_names()
+
+#print variable names
+names(student_data)
+```    
+     
+      
+## Summary Stats 
+
+Provide the relevant summary statistics for the study (mean and sd of variables, scatterplot, correlation). Provide and interpretation of the summary statistics (specifically the scatterplot and correlation).  Is there evidence of a linear relationship? Due to missing data, you may need to include `na.rm=TRUE` if you use function `mean()` and `sd()` functions. I gave to you the 'cor' function argument that will only use pairwise complete observations to avoid missing data.
+    
+```{r}
+#Put code and output here
+#correlation for only pairwise complete observations
+cor(gpa ~ verbal_sat, data = student_data, use = "pairwise.complete.obs")
+
+```  
+      
+> Insert Interpretation Here
+        
+## Fit the Model
+
+Fit a linear regression model to predict College GPA based on Verbal SAT scores. 
+
+### Find the regression model
+
+Find the regression model.  Write out the model in $y=\beta_0+\beta_1*x$ format. Provide a scatterplot with the regression line added to the plot.  
+                
+```{r}
+
+#Provide R code and output/graphs  
+
+
+```
+            
+> Insert Answer Here
+
+### Slope Interpretation
+
+Interpret the slope in the context of the situation.  
+
+> Insert Answer Here
+
+
+### Y-Intercept Interpretation
+
+Interpret the y-intercept in the context of the situation. Is its interpretation practical in context?  
+
+> Insert Answer Here
+        
+## Hypothesis Test for Slope
+
+Now we will conduct the test to determine if the linear relationship is statistically significant.
+
+### Hypotheses
+
+Set up the appropriate null and alternative hypothesis verbally and symbolically.   
+> Insert Answer Here      
+
+### Test Statistics
+
+Use R to find the ANOVA table and/or t-test statistics to test the hypothesis test.  
+            
+```{r}
+#Put Code and output here
+
+
+```    
+
+### P-value interpretation
+
+Interpret the meaning of the p-value in the context of the situation. 
+
+> Insert Answer Here
+
+### HT Conclusion
+
+State the conclusion of the hypothesis test in the context of the problem.
+
+> Insert Answer Here      
+
+## Coefficient of Determination
+
+Interpret the $R^2$ value in the context of the model variables.   
+
+> Insert Answer Here      
+
+## Practical Significance
+
+Given the $R^2$ value, is the relationship observed practically significant?  What might explain apparent "disagreement" between the practical and statistical significance of the linear relationship?  
+
+> Insert Answer Here      
+
+## Assumptions
+
+We have to determine whether the results of the analysis are trustworthy, i.e., the assumptions to perform the Regression Analysis are met by the data. 
+
+### Normality
+
+Provide and interpret the results of the QQPlot and Shapiro-Wilk Test to determine if the normality of residuals is a satisfied assumption.  
+```{r}
+#Put Code and output here
+
+```   
+
+> Insert Answer Here      
+   
+### Equal Variance
+
+Provide and interpret the Residual Plot to test Equal Variance of the residuals.  
+
+```{r}
+#Put Code and output here
+``` 
+
+> Insert Answer Here      
+ 
+### Independence of Residuals
+
+Interpret the results of the Residual Plot to test the Independence of Residuals assumption.  
+
+> Insert Answer Here      
+
+
+### Outliers
+
+Provide and interpret the Cook's distance plot to test if there are outliers in the data.  
+
+```{r}
+#Put Code and output here
+```  
+
+> Insert Answer Here      
+
+
+### Assumptions Conclusion
+
+After assessing all assumptions, do you have an concerns about the analysis?   
+
+> Insert Answer Here      
+
+  
+
+## Predictions
+
+Let's use the model to make predictions about performance in college. 
+
+### Prediction for SAT=600
+
+Predict an **individual's** College GPA given a Verbal SAT score of 600 with a 95% prediction interval. Interpret your interval in the context of the problem.
+
+```{r}
+#Put Code and output here
+
+
+```
+
+> Insert Answer Here      
+
+
+
+### Prediction for SAT=550
+
+ Predict the **average** College GPA for students with a Verbal SAT score of 550 with a 95% confidence interval. Interpret your interval in the context of the problem.  
+
+```{r}
+#Put Code and output here
+
+```
+
+> Insert Answer Here      
+
+
+
+### Interval Width
+
+Notice the width of the intervals for the previous parts.  Why is the prediction interval so much wider than the confidence interval?   
+
+> Insert Answer Here      
+
+
+# Part 3
+
+Now we are going to look at a model that examines `GPA` and `MathSAT` instead of verbal SAT.
+      
+## Summary Stats
+
+Provide the relevant summary statistics for the study (mean and sd of variables, scatterplot, correlation). Provide and interpretation of the summary statistics (specifically the scatterplot and correlation).  Is there evidence of a linear relationship? (you may need to include na.rm=T again for mean() and sd() and input "pairwise.complete.obs" as an argument in cor()).  
+
+```{r}
+
+#Put Code and output here
+
+```  
+
+> Insert Answer Here      
+
+
+## Fit the Model
+
+Fit a linear regression model to predict College GPA based on Math SAT scores. 
+
+### Find the regression model
+
+Find the regression model.  Write out the model in $y=\beta_0+\beta_1*x$ format. Provide a scatterplot with the regression line added to the plot.  
+
+```{r}
+#Put Code and output here
+
+```
+
+> Insert Answer Here      
+
+
+## Hypothesis Test for Slope
+
+Now we will conduct the test to determine if the linear relationship is statistically significant.
+
+### Test Statistics
+
+Use R to find the ANOVA table and/or t-test statistics to test the hypothesis test.  
+            
+```{r}
+#Put Code and output here
+
+```    
+
+### HT Conclusion
+
+State the conclusion of the hypothesis test in the context of the problem.
+
+> Insert Answer Here      
+
+           
+## Coefficient of Determination
+
+Interpret the $R^2$ value in the context of the model variables.   
+
+> Insert Answer Here      
+
+
+
+## Practical Significance
+
+Given the $R^2$ value, is the relationship observed practically significant?  What might explain apparent "disagreement" between the practical and statistical significance of the linear relationship?  
+
+> Insert Answer Here      
+
+        
+## Assumptions
+
+We have to determine whether the results of the analysis are trustworthy, i.e., the assumptions to perform the Regression Analysis are met by the data. Analyze all assumptions in one code chunk and interpret the results 
+
+```{r}
+#Put Code and output here
+
+```   
+
+> Insert Answer Here      
+
+    
+## Model Comparison
+
+Compare the new model predicting college GPA with Math SAT Scores to the model predicting GPA with Verbal SAT Scores.  Which model would be the best (relative to each other) model to predict college GPA?  Justify your answer with the statistical analysis.  
+
+> Insert Answer Here      
+
+
+## Unexplained Variability
+
+In both models there is a lot of unexplained variability in College GPA. What might explain that leftover variability?  
+
+> Insert Answer Here      
+
+# Part 4
+
+Here are some conceptual questions about simple linear regression. 
+
+## P-values and R-squared
+
+Does a small p-value imply good explanatory ability (i.e., high R-squared value)? Explain your answer.
+
+> Insert Answer Here      
+
+
+## Four Steps
+
+Describe the four steps that we always follow when conducting a regression analysis. 
+
+> Insert Answer Here      
+
+
+## Y-hat
+
+Explain the difference between the notation $y_i$ and $\hat{y_i}$. What does each represent?
+
+> Insert Answer Here      
+
+
+## All Models
+
+Complete the following sentence:
+
+> "All models are **__________**, but some are **___________**. " -GEP Box
+
+## Outliers
+
+True or False: We should always remove outliers from our dataset in order to improve the fit of our linear model.
+
+> Insert Answer Here      
+
+
+## F versus t
+
+Explain the differences and similarities between using the ANOVA F-test and the t-test for determining if there is a significant linear relationship between 2 variables. 
+
+> Insert Answer Here      
