@@ -1,0 +1,671 @@
+---
+title: 'Lab 3: Multiple Linear Regression'
+format:
+  docx:
+    embed-resources: true
+    number-sections: true
+date: "`r Sys.Date()`"
+---
+
+## Name:
+
+***
+<!-- Use these arrows and dashes to add a text comment that won't appear in the rendered file. This is different than a comment that goes in a code chunk, where you would use # -->
+
+<!-- The *** creates a small line to separate sections of your document -->
+
+<!-- While working on your lab, it might be easier to output to HTML instead of word. In the YAML in line 4, you can change "docx:" to "html:".  Just make sure to change it back to "html:" when rendering your final file to submit! -->
+
+**Please make sure to show all R code and output after each question so that I can see your work.**  Write a sentence for each numerical value produced describing its meaning **in context with the proper units**.
+
+
+**Be sure to follow all style guide suggestions (this may include fixing provided code)**
+
+```{r}
+#| label: setup
+#| include: false
+#| error: true
+knitr::opts_chunk$set(echo = TRUE, 
+                      comment = "", 
+                      message = FALSE, 
+                      warning = FALSE)
+#load common packages
+library(mosaic)
+library(ggformula)
+library(tidyverse)
+
+#janitor package will help us clean up variable names
+library(janitor)
+
+#MLR packages
+library(car)
+```
+
+***
+
+# Problem 1
+A medical study was conducted to study the relationship between systolic blood pressure and the explanatory variables, weight (kg) and age (days) for infants.  The data for 25 infants is provided in `infants.csv`.  The researchers decide to consider the general linear model: 
+
+$\hat{y}_{BP}=\hat{\beta}_0+\hat{\beta}_1x_{age}+\hat{\beta}_2x_{wt}$   
+
+
+## RQ
+State the statistical analysis research question for your Regression Analysis.
+         
+> Insert Answer Here 
+
+## Response
+Name the response variable of interest below and state the type (numerical, categorical).  
+
+> Insert Answer Here 
+
+## Explanatory
+Name the explanatory variables of interest below and state the types (numerical, categorical).  
+    
+> Insert Answer Here 
+        
+## Data Collection
+Describe the data collection technique: is it experimental or observational?  
+    
+> Insert Answer Here 
+
+## Read in the Data
+```{r}
+#Provide R code and output/graphs 
+infants <- read_csv("infants.csv")
+
+infants <- infants |>
+  clean_names()
+
+names(infants)
+```
+
+## EDA
+Exploratory data analysis: provide the summary statistics (at least mean and standard deviation) for each explanatory variable and the response.  In addition, provide a scatterplot of each explanatory variable versus the response.  Graphs should have proper x and y axis labels.  Discuss the observed relationships and possible implications on the structure of the regression model (first order model or higher order models).  
+        
+```{r}
+#Provide R code and output/graphs 
+
+
+```
+            
+> Insert Answer Here 
+   
+ 
+## Coefficients
+Determine the coefficients for each variable in the model AND provide an interpretation of each parameter estimate in the context of the problem.  
+
+```{r}
+#Provide R code and output/graphs  
+
+```  
+            
+> Intercept: 
+
+> Age Partial Slope:
+
+> Weight Partial Slope: 
+ 
+## Collinearity
+Test for possible correlations between the explanatory variables and assess the possible impact of collinearity.  Provide measures of correlation, scatterplots and VIF assessment.    
+
+```{r}
+#Provide R code and output/graphs 
+
+
+```
+            
+> Insert Answer Here 
+    
+
+## Assumptions
+Conduct appropriate testing for the assumptions of Regression Analysis.  
+
+### Equal Variance
+Did the observations pass the equal variance assumption?  
+    
+```{r}
+#Provide R code and output/graphs  
+```
+            
+> Insert Answer Here 
+            
+
+### Independence
+Did the observations pass the independence assumption?   
+                  
+```{r}
+#Provide R code and output/graphs  
+```  
+            
+> Insert Answer Here 
+            
+
+### Normality
+Did the observations pass the normality assumption?    
+                  
+```{r}
+#Provide R code and output/graphs 
+
+```  
+
+> Insert Answer Here 
+            
+
+### Outliers	
+Did the observations pass the no outlier assumption?  
+        
+```{r}
+#Provide R code and output/graphs 
+```  
+
+> Insert Answer Here 
+            
+
+## General Hypothesis 
+Now we will conduct the test to determine if the linear relationship is statistically significant by testing the *general* hypothesis for the full model.  
+    
+### Hypotheses
+State the *general* hypothesis for the full model (null and alternative) for Multiple Regression Analysis mathematically, AND and in a complete sentence in the context of the problem. (Just writing "all partial slopes are zero" is not sufficient.)  Make sure to use mathematical notation usying symbols like $H_0$ and $\beta$ and $\neq$ for the mathematical statements. 
+
+$H_0: ...$  
+
+> Insert Answer Here 
+
+
+$H_1:$ ...  
+
+> Insert Answer Here 
+ 
+        
+        
+### F Test
+Use R to find the ANOVA F-test statistics to test the general hypothesis test.                      
+```{r}
+#Provide R code and output/graphs
+```  
+            
+### P-value 
+Interpret the meaning of the p-value in the context of the situation. (What does the numeric value actually mean? This is NOT asking you to make a decision or conclusion based on the p-vale; just interpret the number.)  
+        
+> Insert Answer Here 
+        
+        
+### Conclusion
+State the conclusion of the hypothesis test in the context of the problem.
+        
+> Insert Answer Here 
+            
+            
+## Specific Hypotheses
+Now we will conduct the test to determine if each variables is statistically significant by testing the *specific* hypotheses for each variable.  
+    
+### Hypotheses
+State the *specific* hypotheses for *each* variable in the model (null and alternative) for Multiple Regression Analysis mathematically and in a complete sentence.   
+            
+$H_0: \beta_1=0$  
+
+> Insert Answer Here 
+
+$H_A: \beta_1...$  
+
+> Insert Answer Here 
+ 
+$H_0: \beta_2...$  
+
+> Insert Answer Here 
+
+$H_A: \beta_2...$ 
+
+> Insert Answer Here 
+        
+        
+### T-tests 
+Use R to find the t-test statistics to test each hypothesis test.                      
+        
+```{r}
+#Provide R code and output/graphs 
+```  
+            
+### P-values 
+Interpret the meaning of the p-values in the context of the situation.  
+        
+> Insert Answer Here 
+ 
+
+> Insert Answer Here 
+        
+        
+### Conclusions 
+State the conclusions of *each* of the specific hypothesis tests in the context of the problem.
+        
+> Insert Answer Here 
+
+
+> Insert Answer Here 
+
+
+
+## R-Squared
+Interpret the correct $R^2$ value in the context of the model variables. Assess the strength of the predictive power of the model.  
+        
+> Insert Answer Here 
+        
+  
+## Concerns?
+Do you have any concerns or issues with the formulation of the model and the included variables?  Explain.  
+   
+> Insert Answer Here 
+
+
+***
+
+# Problem 2 - Lego Themes vs Price
+The Lego dataset includes LEGO sets from all themes produced between January 1, 2018 and September 11, 2020. The data set in this problem is restricted to a random sample of 75 of the 1,304 LEGO sets posted on Brickset (Brickset, n.d.). Data was scraped from Brickset and merged with data scraped from BrickInstructions.com. Twenty-five sets were sampled from each of the City, Duplo, and Friends themes.  
+
+We are interested in comparing the average Amazon price across the different Lego themes City, Duplo, and Friends. 
+
+Read in the data and view the variables.
+```{r}
+lego <- read_csv("lego_sample.csv")
+
+lego <- lego |>
+  clean_names()
+
+str(lego)
+```
+
+## Data Cleaning
+The original dataset has additional themes, so first we will filter the data to only include these themes. We also need to clean the price variables to remove the dollar signs and store them as numeric data. 
+
+```{r}
+#first we need to clean the levels of the categorical variables so they are easier to reference. For example, DUPLO is all caps and has a trademark logo in the original data
+lego_clean <- lego |>
+  #remove the trademark symbol from Duplo
+  mutate(theme = gsub("\\®", "", theme)) |>
+  mutate(theme = gsub("<ae>", "", theme)) |>
+  #make all theme names all lowercase AND store as a factor variable
+  mutate(theme = factor(tolower(theme))) |>
+  #remove the $ from retail and Amazon price, and make the variables numeric 
+  mutate(price = as.numeric(gsub("\\$", "", price))) |>
+  mutate(amazon_price = as.numeric(gsub("\\$", "", amazon_price)))
+
+#check what the levels of the theme variable are to make sure we fixed relevant naming issues
+unique(lego_clean$theme)
+
+```
+
+## EDA
+Exploratory data analysis: Create an appropriate graphic for displaying the difference in Amazon Price based on the three Lego themes we are studying. Graphs should have proper x and y axis labels. Also calculate relevant summary statistics (at least mean and sd) for each theme, and include a table showing how many observations are in each theme. What do you notice about the relationships?
+        
+```{r}
+#Provide R code and output/graphs 
+
+#Summary of categorical variable, theme
+tally(~theme, data = lego_clean)
+
+
+```
+
+> Insert Answer Here 
+
+
+## Linear Model
+
+Create a linear model to compare the Amazon Price between each of the three themes. Do NOT alter the reference level. 
+
+```{r}
+
+```
+
+## Reference Level
+Which theme is the reference level in this regression model, and why?
+
+> Insert Answer Here 
+
+## Model
+Write out the full model using mathematical notation 
+
+$\hat{y}_{AmazonPrice} = 45.27 + ... $
+
+
+## Parameter Interpretations
+Write an interpretation for EACH coefficient in the model. 
+
+> Intercept Interpretation: 
+
+> Partial slope 1 Interpretation: 
+
+> Partial slope 2 Interpretation: 
+
+## Assumptions
+Conduct appropriate testing for the assumptions of Regression Analysis.  
+
+### Equal Variance
+Did the observations pass the equal variance assumption? (The boxplots might help assess this, in addition to residuals vs fitted) 
+    
+```{r}
+#Provide R code and output/graphs  
+
+```
+            
+> Insert Answer Here 
+
+            
+### Independence
+Did the observations pass the independence assumption?   
+                  
+```{r}
+#Provide R code and output/graphs  
+
+```  
+            
+> Insert Answer Here 
+            
+
+### Normality
+Did the observations pass the normality assumption?    
+                  
+```{r}
+#Provide R code and output/graphs 
+
+```  
+            
+> Insert Answer Here 
+
+            
+
+### Outliers	
+Did the observations pass the no outlier assumption?  
+        
+```{r}
+#Provide R code and output/graphs 
+
+```  
+
+> Insert Answer Here 
+
+
+## General Hypothesis 
+Now we will conduct the test to determine if the linear relationship is statistically significant by testing the *general* hypothesis for the full model.  
+    
+### Hypotheses with $\beta$
+State the *general* hypothesis for the full model (null and alternative) for Multiple Regression Analysis mathematically using *$\beta$* notation, AND and in a complete sentence in the context of the problem. Make sure to use mathematical notation using symbols like $H_0$ and $\beta$ and $\neq$ for the mathematical statements. 
+            
+$H_0: \beta_1...$  
+
+> Insert Answer Here 
+
+$H_1:$...  
+
+> Insert Answer Here 
+   
+        
+### Hypotheses with $\mu$
+Rewrite the general hypothesis using $\mu$ in your notation instead of $\beta$. Rewrite the sentence descriptions as well. 
+
+$H_0: ...$
+
+> Insert Answer Here 
+
+$H_1:$ 
+
+> Insert Answer Here 
+
+
+### F Test
+Use R to find the ANOVA F-test statistics to test the general hypothesis test.                      
+```{r}
+#Provide R code and output/graphs
+```  
+            
+### Conclusion
+State the conclusion of the hypothesis test in the context of the problem.
+        
+> Insert Answer Here 
+
+
+## Specific Hypotheses
+
+If the overall F test is not significant, there is no reason to conduct the specific hypothesis tests! We have already found no evidence that any means differ, so we do not need to keep digging. 
+
+## Change the reference level
+
+Change the reference level and refit the model so that R will calculate the difference in average Amazon price for Duplo vs. Friends Lego sets. 
+
+```{r}
+
+```
+
+What is the difference in average price for Duplo and Friends Lego sets? Write a sentence describing the difference. 
+
+> Insert Answer Here 
+
+Did any change occur in the overall F test when we changed the reference level? Explain.
+
+> Insert Answer Here 
+
+
+***
+
+# Problem 3 - Amazon Price, Pieces, and Theme
+
+We are now interested in answering the research question "Is the Amazon price explained by the number of pieces in the Lego set, also considering differences in theme? We will start with the same `lego_clean` dataset we used for the last problem.
+
+## Comparing Slopes for 3 Themes
+Create a scatterplot to display the relationship between the response variable (Amazon Price) and the explanatory (pieces), creating a separate regression line for each theme, as we learned in the notes. 
+
+```{r}
+#scatterplot including line for each theme
+
+```
+
+Our intent is to include Theme as a categorical predictor with 2 dummy variables alongside Pieces, such as the following model:
+
+$\hat{y}_{Amazon}=\hat{\beta}_0+\hat{\beta}_1x_{Pieces} + \hat{\beta}_2x_{Duplo} + \hat{\beta}_2x_{Friends}$ 
+
+But as we discussed in class, this type of model assumes that the slope between the explanatory and repose is parallel for each level of the categorical variable. Does that assumption appear to be met in this data?
+
+> Insert Answer Here 
+ 
+
+Since we have not yet learned interaction terms (which allow for non-parallel slopes), for this lab we will remove Duplo sets from the data and focus on comparing Friends and City datasets. Note that we are now only comparing 2 theme sets, and the model can be written as follows: 
+
+$\hat{y}_{Amazon}=\hat{\beta}_0+\hat{\beta}_1x_{Pieces} + \hat{\beta}_2x_{Friends}$ 
+
+Here is the code to filter out the Duplo sets so that we only compare Friends and City sets:
+
+```{r}
+lego_2theme <- lego_clean |>
+  filter(theme != "duplo")
+
+```
+
+We will now proceed with building and testing this model to understand the relationship between Amazon Price, Pieces, and Theme. 
+
+## EDA
+Exploratory data analysis: provide the summary statistics for each explanatory variable and the response.  In addition, provide a scatterplot of the explanatory variable versus the response, creating separate regression line for each theme (just Friends and City).  Graphs should have proper x and y axis labels.  Discuss the observed relationships and possible implications on the structure of the regression model.  
+        
+```{r}
+#Provide R code and output/graphs 
+
+
+```
+Does the assumption of parallel slopes appear valid when only comparing Friends and City themes?
+
+> Insert Answer Here 
+
+## Coefficients
+Determine the coefficients for each variable in the model AND provide an interpretation of each parameter estimate in the context of the problem.  
+
+```{r}
+#Provide R code and output/graphs  
+
+```  
+            
+> Intercept: 
+
+> Pieces Partial Slope:  
+
+> Theme Partial Slope:
+
+## R-Squared
+Calculate and interpret the correct $R^2$ value in the context of the model variables. Assess the strength of the predictive power of the model.  
+
+```{r}
+#Provide R code and output/graphs 
+
+```
+
+> Insert Answer Here 
+ 
+
+## Collinearity 
+Assess the possible impact of collinearity using VIF. Is there cause for concern?    
+
+```{r}
+#Provide R code and output/graphs 
+
+```
+
+> Insert Answer Here 
+
+
+## Other Assumptions	
+Conduct appropriate testing for all other assumptions of the regression analysis. Is there any cause for concern?
+
+```{r}
+#Provide R code and output/graphs 
+
+
+```
+
+> Linearity: 
+
+> Equal Variance: 
+
+> Independence: 
+
+> Normality: 
+
+> Outliers: 
+
+## General Hypothesis 
+Now we will conduct the test to determine if the linear relationship is statistically significant by testing the *general* hypothesis for the full model.  
+    
+### Hypotheses
+State the *general* hypothesis for the full model (null and alternative) for Multiple Regression Analysis mathematically, AND and in a complete sentence in the context of the problem. (Just writing "all partial slopes are zero" is not sufficient.)  Make sure to use mathematical notation usying symbols like $H_0$ and $\beta$ and $\neq$ for the mathematical statements. 
+            
+$H_0: ...$  
+
+> Insert Answer Here 
+
+$H_1:$ ... 
+
+> Insert Answer Here 
+        
+### F Test
+Use R to find the ANOVA F-test statistics to test the general hypothesis test.                      
+```{r}
+#Provide R code and output/graphs
+
+```  
+            
+### Conclusion
+State the conclusion of the hypothesis test in the context of the problem.
+        
+> Insert Answer Here 
+
+            
+## Specific Hypotheses
+Now we will conduct the test to determine if each variables is statistically significant by testing the *specific* hypotheses for each variable.  
+    
+### Hypotheses
+State the *specific* hypotheses for *each* variable in the model (null and alternative) for Multiple Regression Analysis mathematically and in a complete sentence.   
+            
+$H_0: \beta_1=0$  
+
+> Insert Answer Here 
+  
+
+$H_A: \beta_1...$  
+
+> Insert Answer Here 
+  
+ 
+$H_0: \beta_2...$  
+
+> Insert Answer Here 
+ 
+
+$H_A: \beta_2...$ 
+
+> Insert Answer Here 
+ 
+        
+        
+### T-tests 
+Use R to find the t-test statistics to test each hypothesis test.                      
+        
+```{r}
+#Provide R code and output/graphs 
+
+```  
+
+### Conclusions 
+State the conclusions of each of the specific hypothesis tests in the context of the problem.
+        
+> Test 1:  
+
+> Test 2: 
+
+
+## Considering Unique Pieces
+
+The researchers are interested in the number of unique pieces in the dataset; in particular they think that unique pieces might be an indicator of the complexity of the dataset, in addition to the overall numer of pieces. They consider the model:
+
+The researchers decide to consider the general linear model: $\hat{y}_{Amazon}=\hat{\beta}_0+\hat{\beta}_1x_{Pieces} + \hat{\beta}_2x_{Theme}+\hat{\beta}_3x_{UniquePieces}$  
+
+What concerns do you have about adding Unique Pieces into the model, in particular as it relates to the other explanatory variables?
+
+> Insert Answer Here 
+
+### Fit the model
+
+Fit the regression model, adding Unique Pieces as an explanatory variable (also keep Pieces in the model). Output the regression coefficients along with the general and specific hypothesis test results. 
+
+```{r}
+#Provide R code and output/graphs  
+
+```  
+Is the overall model significant? Are any of the individual predictors significant?
+
+> Insert Answer Here 
+ 
+
+### Collinearity
+Test for possible correlations between the explanatory variables and assess the possible impact of collinearity.  Provide measures of correlation, scatterplots and VIF assessment. Is there cause for concern? 
+
+```{r}
+#Provide R code and output/graphs 
+
+
+```
+
+> Insert Answer Here 
+
+
+## Recommendation
+
+Would you recommend including Pieces, Unique Pieces, or Both in the regression model? Justify your answer using statistical results. Write code to conduct additional analyses if it aids in your decision. 
+
+```{r}
+#Provide R code and output/graphs 
+
+
+```
+
+> Insert Answer Here 
+
+***
+*The end.*
