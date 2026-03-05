@@ -1,0 +1,480 @@
+---
+title: 'Lab 4: Extensions of the Linear Model'
+format:
+  docx:
+    embed-resources: true
+    number-sections: true
+date: "`r Sys.Date()`"
+---
+
+## Name: 
+
+***
+<!-- Use these arrows and dashes to add a text comment that won't appear in the rendered file. This is different than a comment that goes in a code chunk, where you would use # -->
+
+<!-- The *** creates a small line to separate sections of your document -->
+
+<!-- While working on your lab, it might be easier to output to HTML instead of word. In the YAML in line 4, you can change "docx:" to "html:".  Just make sure to change it back to "html:" when rendering your final file to submit! -->
+
+<!-- **Please make sure to show all R code and output after each question so that I can see your work.**  Write a sentence for each numerical value produced describing its meaning **in context with the proper units**. -->
+
+<!-- **Be sure to follow all style guide suggestions (this may include fixing provided code)** -->
+
+```{r}
+#| label: setup
+#| include: false
+#| error: true
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, warning = FALSE)
+#load common packages
+library(mosaic)
+library(ggformula)
+library(tidyverse)
+
+#janitor package will help us clean up variable names
+library(janitor)
+
+#MLR packages
+library(car)
+
+theme_set(theme_light())
+```
+
+***
+
+# Problem 1 - Lego Prieces, Price, and Theme
+The Lego dataset includes LEGO sets from all themes produced between January 1, 2018 and September 11, 2020. The data set in this problem is restricted to a random sample of 75 of the 1,304 LEGO sets posted on Brickset (Brickset, n.d.). Data was scraped from Brickset and merged with data scraped from BrickInstructions.com. Twenty-five sets were sampled from each of the City, Duplo, and Friends themes.  
+
+We are interested in answering the research question "Is the Amazon price explained by the number of pieces in the Lego set, also considering differences in theme? We will start with the same `lego_clean` dataset we used for the last problem.
+
+Read in the data and view the variables.
+```{r}
+lego <- read_csv("lego_sample.csv")
+
+lego <- lego |>
+  clean_names()
+
+str(lego)
+```
+
+## Data Cleaning
+The original dataset has additional themes, so first we will filter the data to only include these themes. We also need to clean the price variables to remove the dollar signs and store them as numeric data. 
+
+```{r}
+#first we need to clean the levels of the categorical variables so they are easier to reference. For example, DUPLO is all caps and has a trademark logo in the original data
+lego_clean <- lego |>
+  #remove the trademark symbol from Duplo
+  mutate(theme = gsub("\\®", "", theme)) |>
+  mutate(theme = gsub("<ae>", "", theme)) |>
+  #make all theme names all lowercase AND store as a factor variable
+  mutate(theme = factor(tolower(theme))) |>
+  #remove the $ from retail and Amazon price, and make the variables numeric 
+  mutate(price = as.numeric(gsub("\\$", "", price))) |>
+  mutate(amazon_price = as.numeric(gsub("\\$", "", amazon_price)))
+
+#check what the levels of the theme variable are to make sure we fixed relevant naming issues
+unique(lego_clean$theme)
+
+```
+
+## EDA
+Since we already started exploring this data last lab, we will jump back to our scatterplot showing the relationships between pieces and price separately for each theme. 
+        
+```{r}
+#scatterplot including line for each theme
+gf_point(amazon_price ~ pieces, 
+         shape = ~theme, color = ~theme, 
+         data = lego_clean, 
+         title = "Amazon Price versus Number of Pieces", 
+         xlab = "Number of Total Pieces", 
+         ylab = "Amazon Price for Set (Dollars)") |>
+  gf_lm() +
+  scale_color_viridis_d()
+```
+
+Our intent LAST lab was to include Theme as a categorical predictor with 2 dummy variables alongside Pieces, such as the following model:
+
+$\hat{y}_{Amazon}=\hat{\beta}_0+\hat{\beta}_1x_{Pieces} + \hat{\beta}_2x_{Duplo} + \hat{\beta}_2x_{Friends}$ 
+
+However, that model would force each Theme to have parallel slopes, which is not valid. Now that we have learned interactions, we can build a model that allows for different slopes for each theme! Write a new version of the model that will add two interaction terms (one for each dummy variable) to allow different slopes for each of the three regression lines. Note that we still want the main effects in the model as well. (Hint: you should have one intercept term and 5 partial slopes; 3 for main effects and 2 for interaction effects.)
+
+$\hat{y}_{Amazon}=\hat{\beta}_0+...$ 
+
+We will now proceed with building and testing this model to understand the relationship between Amazon Price, Pieces, and Theme. 
+
+
+## Coefficients
+Determine the coefficients for each variable in the model.
+
+```{r}
+#Provide R code and output/graphs  
+
+```  
+            
+## Theme Equations
+
+Write out the equation of the FULL model, plugging in the parameter estimates. This means you should have numbers instead of $\beta$ symbols in the equation. (Hint: you should have one intercept term and 5 partial slopes; 3 for main effects and 2 for interaction effects.)
+
+$\hat{y}_{Amazon}=...$ 
+
+Write out the equation for the relationship between Pieces and Amazon Price for **Duplo** themed sets. You should simplify your answer so there is one number for the intercept and one number for the slope. 
+
+$\hat{y}_{DuploAmazon}=...$ 
+
+Write out the equation for the relationship between Pieces and Amazon Price for **Friends** themed sets. You should simplify your answer so there is one number for the intercept and one number for the slope.
+
+$\hat{y}_{FriendsAmazon}=...$ 
+
+Write out the equation for the relationship between Pieces and Amazon Price for **City** themed sets. You should simplify your answer so there is one number for the intercept and one number for the slope.
+
+$\hat{y}_{CityAmazon}=...$ 
+
+
+## Parameter Interpretations
+Write an interpretation for EACH $\beta$ coefficient in the model. 
+
+> Intercept:  
+
+> Pieces Partial Slope: 
+
+> Theme_Duplo Partial Slope:
+
+> Theme_Friends Partial Slope:
+
+> Pieces:Theme_Duplo Partial Slope:
+
+> Pieces:Theme_Friends Partial Slope:
+
+## R-Squared
+Calculate and interpret the correct $R^2$ value in the context of the model variables. Assess the strength of the predictive power of the model.  
+
+```{r}
+#Provide R code and output/graphs  
+```
+
+> Insert Answer Here   
+
+## Collinearity 
+Assess the possible impact of collinearity using VIF. Is there cause for concern?    
+
+```{r}
+#Provide R code and output/graphs  
+```
+
+> Insert Answer Here 
+
+## Other Assumptions	
+Conduct appropriate testing for all other assumptions of the regression analysis. Is there any cause for concern?
+
+```{r}
+#Provide R code and output/graphs  
+
+
+```
+
+> Linearity: 
+
+> Equal Variance: 
+
+> Independence: 
+
+> Normality:  
+
+> Outliers: 
+
+## General Hypothesis 
+Regardless of your conclusions about the assumptions, we will continue with our analysis for this lab. The general hypothesis test shows that the model does have predictive power. Therefore we will continue to the specific hypothesis tests, in particular for the interaction terms. 
+            
+## Specific Hypotheses
+We are particularly interested in the interaction terms in this model. Now we will conduct the test to determine if each interaction term is statistically significant.  
+    
+### Hypotheses
+State the *specific* hypothesis for for the partial slope for the interaction between Pieces and Theme_Duplo (null and alternative) for both mathematically and in a complete sentence.   
+            
+$H_0: \beta ...$  
+
+> Insert Answer Here 
+
+$H_A:$  
+
+> Insert Answer Here   
+ 
+State the *specific* hypothesis for for the partial slope for the interaction between Pieces and Theme_Friends (null and alternative) for both mathematically and in a complete sentence. 
+
+$H_0:$  
+
+> Insert Answer Here 
+
+$H_A:$  
+
+> Insert Answer Here   
+        
+### T-tests 
+Use R to find the t-test statistics to test each hypothesis test.                      
+        
+```{r}
+#Provide R code and output/graphs 
+```  
+
+### Conclusions 
+State the conclusions of each of the specific hypothesis tests in the context of the problem.
+        
+> Test 1 Pieces*Duplo:  
+
+> Test 2 Pieces*Friends: 
+
+***
+
+# Problem 2 - Poultry 
+A poultry scientist was studying various dietary additives to increase the rate at which chickens gain weight.  One of the potential additives was studied by creating a new diet which consisted of a standard basal diet supplemented with varying amounts of the additive (0, 20, 50, 60, 80, 100 mg).  In addition, they looked at the effects of high copper levels in the chick feed by adding either 0 or 400 ppm of cooper to the feed.  There were sixty chicks available for the study.  Each of the six diets for additives was randomly assigned to 10 chicks.  Then 5 of the 10 chicks were randomly assigned to the high level of copper (400ppm) and the remaining 5 received 0ppm copper.  At the end of four weeks, the feed efficiency ratio, measured as feed consumed (g) to weight gain (g), was obtained for the sixty chicks and is provided in the data file poultry.csv.  The researchers decide to consider the general linear model:  
+
+$\hat{y}_{FER}=\hat{\beta}_0+\hat{\beta}_1x_{add}+\hat{\beta}_2x_{Cu}$  
+
+
+## Research Question 
+State the statistical analysis research question for your Regression Analysis.   
+         
+> Insert Answer Here   
+
+## Response Variable
+Name the response variable of interest below and state the type (numerical, categorical).  
+
+> Insert Answer Here  
+
+## Explanatory Variable
+Name the explanatory variables of interest below and state the types (numerical, categorical).  
+    
+> Insert Answer Here  
+        
+## Data Collection Technique
+Describe the data collection technique: is it experimental or observational?  
+    
+> Insert Answer Here 
+
+## Exploratory Data Analysis
+Provide the summary statistics (mean and standard deviation) for each explanatory variable and the response.  In addition, provide a scatterplot of **each** explanatory variable versus the response. (NOTE: this means that I recommend you treat copper as a **numeric** variable in this analysis. It could also be treated as categorical, but that would change your interpretations throughout the analysis.) Graphs should have proper x and y axis labels.  Discuss the observed relationships and possible implications on the structure of the regression model (first order model or higher order models).  
+        
+```{r}
+#Provide R code and output/graphs 
+
+#read in the data 
+
+#clean the variable names! 
+
+#summary stats
+
+```
+    
+> Insert Answer Here  
+ 
+## First Order Model
+
+### Coefficients
+Determine the coefficients for each variable in the model **and** provide an interpretation of each parameter in the context of the problem. (Use the model proposed by the researchers, regardless of your conclusions in the previous portion.)  
+
+```{r}
+#Provide R code and output/graphs
+
+
+```  
+    
+> Intercept:   
+
+> Copper:  
+
+> Additive:   
+
+### R-Squared
+Interpret the correct $R^2$ value in the context of the model variables. Assess the strength of the predictive power of the model.  
+
+```{r}
+#Provide R code and output/graphs  
+
+```
+
+        
+> Insert Answer Here  
+ 
+### Collinearity  
+Test for possible correlations between the explanatory variables and assess the possible impact of collinearity.  Provide measures of correlation, scatterplots and VIF assessment.    
+
+```{r}
+#Provide R code and output/graphs 
+
+```
+    
+> Insert Answer Here  
+
+### Assumptions
+Conduct appropriate testing for the assumptions of Regression Analysis.  
+
+#### Equal Variance	
+Did the observations pass the equal variance assumption?  
+    
+```{r}
+#Provide R code and output/graphs 
+
+```
+
+> Insert Answer Here 
+            
+
+#### Independence
+Did the observations pass the independence assumption?   
+                  
+```{r}
+#Provide R code and output/graphs  
+```  
+
+> Insert Answer Here 
+            
+
+#### Normality 
+Did the observations pass the normality assumption?    
+                  
+```{r}
+#Provide R code and output/graphs 
+
+```  
+
+> Insert Answer Here 
+            
+
+#### Outliers
+Did the observations pass the no outlier assumption?  
+        
+```{r}
+#Provide R code and output/graphs  
+```  
+
+> Insert Answer Here   
+            
+
+## Higher Order Model 
+The researchers decide to switch to a model that also includes a 2nd order and 3rd order term for Additive Level.
+
+### Model Equation
+Write out the new model using $\hat{y}$, $\beta$ values, and $X$ values. (You might want to borrow the model from the Problem 2 description and modify it.)
+
+$\hat{y}_{FER}=...$   
+
+### Coefficients	
+Create the second and third order terms, and then the coefficients for each variable in the model. If possible, interpret the parameter estimates as usual. If not possible, explain why not. (Note you should NOT center your variables unless you want to practice that here.)
+
+```{r}
+#Provide R code and output/graphs  
+
+#Create new variables
+
+
+#Create model
+
+```  
+    
+> Intercept:  
+
+> Copper: 
+
+> Additive:  
+ 
+### Collinearity 
+Calculate appropriate VIF values and assess the possible impact of collinearity. If collinearity is present, why do you think this is? 
+
+```{r}
+#Provide R code and output/graphs 
+```
+    
+> Insert Answer Here 
+
+### Center your Variables
+
+Based on issues with collineary, center the additive variable, recalculate the higher order terms, and rerun the linear model with these centered variables. Then test for collinearity again. Is collinearity a concern in this revised model?
+
+```{r}
+#Create new variables
+  
+
+#Create model
+
+
+
+#new VIF values
+```
+
+> Insert Answer Here 
+
+### Other Assumptions	
+Conduct appropriate testing for all other assumptions of the regression analysis. Is there any cause for concern?
+
+```{r}
+
+
+```
+
+> Linearity: 
+
+> Equal Variance: 
+
+> Independence: 
+
+> Normality:  
+
+> Outliers: 
+
+
+### General Hypothesis 
+Now we will conduct the test to determine if the linear relationship is statistically significant by testing the *general* hypothesis for the full model.  
+    
+#### Hypotheses
+State the *general* hypothesis for the full model (null and alternative) for Multiple Regression Analysis mathematically and in a complete sentence.  
+            
+$H_0: \beta...$  
+
+> Insert Answer Here   
+
+
+$H_1:$  
+
+> Insert Answer Here  
+        
+        
+#### Test Statistic
+Use R to test the general hypothesis.                      
+        
+```{r}
+#Provide R code and output/graphs  
+```  
+            
+#### P-value
+Interpret the meaning of the p-value in the context of the situation.  
+        
+> Insert Answer Here 
+        
+        
+#### Conclusion
+State the conclusion of the hypothesis test in the context of the problem.
+        
+> Insert Answer Here 
+
+### Specific Hypotheses
+Consider the specific hypotheses for all three Additive terms in the model, in addition to Copper. Do we have evidence that Additive should be explained by a third-order model, when copper is also included in the model? Explain
+
+> Insert Answer Here 
+
+Do we have evidence that copper is a significant predictor of Feed Efficiency Ratio, when Addititive is also accounted for in the model? Explain. 
+
+> Insert Answer Here 
+            
+### R-Squared
+Interpret the correct $R^2$ value in the context of the model variables. Assess the strength of the predictive power of the model.  
+        
+> Insert Answer Here   
+        
+  
+## Comparison
+Compare the three  models that you considered for predicting Feed Effect Ratio (first order, higher-order non-centered, and higher-order centered). Which model do you think would be the best (relative to each other) in predicting Feed Effect Ratio? Justify your answer using statistical results.
+
+> Insert Answer Here 
+
+
+***
+*The end.*
