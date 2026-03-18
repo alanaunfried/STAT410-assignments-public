@@ -1,0 +1,357 @@
+---
+title: 'Lab 5: Variable Selection'
+format:
+  docx:
+    embed-resources: true
+    number-sections: true
+date: "`r Sys.Date()`"
+---
+
+## Name: 
+
+***
+<!-- Use these arrows and dashes to add a text comment that won't appear in the rendered file. This is different than a comment that goes in a code chunk, where you would use # -->
+
+<!-- The *** creates a small line to separate sections of your document -->
+
+<!-- While working on your lab, it might be easier to output to HTML instead of word. In the YAML in line 4, you can change "docx:" to "html:".  Just make sure to change it back to "html:" when rendering your final file to submit! -->
+
+<!-- **Please make sure to show all R code and output after each question so that I can see your work.**  Write a sentence for each numerical value produced describing its meaning **in context with the proper units**. -->
+
+<!-- **Be sure to follow all style guide suggestions (this may include fixing provided code)** -->
+
+```{r}
+#| label: setup
+#| include: false
+#| error: true
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, warning = FALSE)
+
+#load all the packages you need here!
+#load common packages
+library(mosaic)
+library(ggformula)
+
+#janitor package will help us clean up variable names
+library(janitor)
+
+#let's us use the select() and filter() functions
+library(dplyr)  
+
+#default graph theme
+theme_set(theme_light())
+
+```
+***
+
+# Part 1: Automated Variable Section
+
+## Exploratory Data Analysis 
+
+Consider the data, `Pollution.csv`, which measured air pollution in 41 U.S. cities.  The type of air pollution under study is the annual mean concentration of sulfur dioxide (SO2).  The values of six potential explanatory variables were recorded in order to examine the variation in the sulfur dioxide concentrations
+  
+* SO2 = the annual mean concentration of sulfur dioxide (micrograms per cubic meter)  
+* temp = the average annual temperature in ?F  
+* comp = number of manufacturing enterprises with 20 or more workers  
+* pop = population size in last census (thousands)  
+* wind = average annual wind speed (mph)  
+*precip = average annual precipitation (inches)  
+*pdays = average number of day with precipitation per year  
+
+We want to develop a model relating sulfur dioxide to the six possible explanatory variables to determine which are able to predict air pollution levels within the cities.  Please provide plots or R output to justify your assessments.  Provide detailed description of what each plot or output displays or calculates.
+
+Your goal is to determine the best model. To do so, be sure to provide the following information
+
+  
+### Variables 
+Define each variable (response/explanatory, numerical/categorical)  
+
+> The response variable is...
+
+> Insert Answer Here   
+
+> Insert Answer Here   
+
+> Insert Answer Here   
+
+> Insert Answer Here   
+
+> Insert Answer Here   
+
+> Insert Answer Here   
+
+### Read in the Data
+
+Here is a tip about reading in this data, given what you will be asked to do in future steps:
+
+The leaps function expects data to be stored in R as a data.frame, which will be the default if you read in the data with the `read.csv()` function. However, if you read in the csv file using `read_csv()`, which is a function from the tidyerse package, by default that function stores the data as what is called a "tibble". I recommend reading in the data with `read.csv()` for this problem. If you want to use `read_csv()`, then you need change the data structure from a `tibble` to a data frame. You can use the following code:
+
+`pollution <- as.data.frame(pollution)`
+
+```{r}
+#read in the data and clean names
+
+#preview the data
+```
+
+
+### Linearity
+Check for Linear Relationships (Tip: if any extreme outliers, try removing them to see how things look.) Is there any evidence that higher-order terms should be included?  
+            
+```{r}
+
+#scatterplots
+
+
+
+#Finding my outlier
+
+#Here is a hint on how to remove one row from a data set, say row 2
+
+#you can use brackets to indicate a row to remove, such as:
+#data2 <- data[-2,] 
+#will remove row2 from the data
+
+#you can also remove rows from a data based on certain criteria, like this example, where we want to keep rows that only have a value of less than 10 for the variable:
+# data_2 <- data |>
+#   filter(variable<10)
+
+
+
+
+#plots with outlier removed
+
+
+```
+
+> Insert Answer Here   
+
+
+### Collinearity
+
+**Continue with the outlier removed from the dataset. **
+
+Check for collinearity. In this case, use the cutoff of 5 of higher to determine that 2 variables are collinear. (Remember to check your notes - how do you proceed in the presence of collinearity?)
+                
+```{r}
+#Provide R code and output/graphs  
+
+```
+    
+> Insert Answer Here   
+
+
+## Variable Selection
+
+Use Adjusted R2 to select the "best" model. (Hint: you should end up with 2 candidates for the best model by the end of Part 2!)
+    
+```{r}
+#Provide R code and output/graphs  
+
+#NOTE: the note outline showed how to use the leaps function to select a set of columns in a row. Remember you can also use the c() function to choose columns that are not in a row. 
+
+ 
+
+```
+    
+> Insert Answer Here (what model is suggested?)    
+
+```{r}
+#2nd model...
+#Provide R code and output/graphs  
+
+```
+    
+> Insert Answer Here (what model is suggested?)   
+
+
+
+
+## Detailed description of the model formulation 
+Why did you choose the models you chose - provide statistical and practical evidence. Provide necessary code and output to support your decisions.  
+
+### Assess Model Assumptions
+Detailed description of assessment of model assumptions. (You should have 2 models to check!)
+    
+```{r}
+#Provide R code and output/graphs for Model 1  
+
+
+```
+
+```{r}
+#Provide R code and output/graphs for Model 2
+
+
+```
+    
+> Insert Answer Here   
+
+### Significance Testing
+Detailed description of assessment of significance tests for *each* candidate model. For each, first consider the general hypothesis test and then the specific hypothesis tests.
+    
+```{r}
+#Provide R code and output/graphs  
+
+```
+    
+> Insert Answer Here    
+
+### Choose your final model
+
+Based on everything you have seen, use **mathematical notation** to write the final model that you choose for predicting so2. 
+
+$\hat{y} = \beta_0 + \beta_1 x_{temp} + ...$
+
+**Why** did you choose this model as your final model? Justify your choice. 
+
+```{r}
+#Provide R code and output/graphs
+
+#note that you can output just the adjusted R squared value or AIC value for model with the following functions:
+#summary(model_name)$adj.r.squared
+#-AIC(model_name)   #yes, include the - sign!
+
+
+```
+
+> Insert Answer Here   
+
+### Model Interprations
+For the final model you chose, give a detailed description of  model including interpretation of the parameter values in the context of the problem.    
+    
+First, write the model with actual numbers plugged in in place of $\beta$ values:
+
+$\hat{y}_{so2} = ...$
+
+Parameter estimate interpretations are as follows: 
+
+> Insert Answer Here   
+
+
+
+### General Conclusion
+General conclusion based on the model - what factors seem to contribute to so2 output. To what population/situations can we apply our findings?  
+        
+> Insert Answer Here   
+
+
+# Part 2: Model Selection to Test a Specific Theory
+
+We will continue explorign the Lego dataset from previous labs. The Lego dataset includes LEGO sets from all themes produced between January 1, 2018 and September 11, 2020. The data set in this problem is restricted to a random sample of 75 of the 1,304 LEGO sets posted on Brickset (Brickset, n.d.). Data was scraped from Brickset and merged with data scraped from BrickInstructions.com. Twenty-five sets were sampled from each of the City, Duplo, and Friends themes.  
+
+The original research question from Lab 4 was: "Is the Amazon price explained by the number of pieces in the Lego set, also considering differences in theme?: We will start with the same `lego_clean` dataset and research question we used for the last problem.
+
+Read in the data and view the variables.
+```{r}
+lego <- read.csv("lego_sample.csv")
+
+lego <- lego |>
+  clean_names()
+
+str(lego)
+```
+
+The original dataset has additional themes, so first we will filter the data to only include these themes. We also need to clean the price variables to remove the dollar signs and store them as numeric data. 
+
+```{r}
+#first we need to clean the levels of the categorical variables so they are easier to reference. For example, DUPLO is all caps and has a trademark logo in the original data
+lego_clean <- lego |>
+  #remove the trademark symbol from Duplo
+  mutate(theme = gsub("\\®", "", theme)) |>
+  mutate(theme = gsub("<ae>", "", theme)) |>
+  #make all theme names all lowercase AND store as a factor variable
+  mutate(theme = factor(tolower(theme))) |>
+  #remove the $ from retail and Amazon price, and make the variables numeric 
+  mutate(price = as.numeric(gsub("\\$", "", price))) |>
+  mutate(amazon_price = as.numeric(gsub("\\$", "", amazon_price)))
+
+#check what the levels of the theme variable are to make sure we fixed relevant naming issues
+unique(lego_clean$theme)
+
+```
+
+## Conclusions from Lab 4
+
+The original model from last lab is: 
+
+$\hat{y}_{Amazon}=\hat{\beta}_0+\hat{\beta}_1x_{Pieces} + \hat{\beta}_2x_{Duplo} + \hat{\beta}_3x_{Friends} + \hat{\beta}_4x_{Pieces}x_{Duplo} + \hat{\beta}_5x_{Pieces}x_{Friends}$ 
+
+Here is a visualization of the model:
+
+```{r}
+# scatterplot including line for each theme
+gf_point(amazon_price ~ pieces,
+  shape = ~theme, color = ~theme, data = lego_clean,
+  title = "Amazon Price versus Number of Pieces",
+  xlab = "Pieces",
+  ylab = "Amazon Price"
+) |>
+  gf_lm()
+```
+
+By the end of lab 4, you visualized this model, tested assumptions, made interpretations of parameter estimates, and considered hypothesis tests for individual terms. 
+
+Recreate the code here that fits the full model shown above, and show the output from hypothesis tests:
+
+```{r}
+# Provide R code and output/graphs
+
+```  
+
+
+Summarize here what you found in Lab 4 from the specific hypotheses about model terms that include Theme. 
+
+> Insert Answer Here  
+
+## Compare 2 Models
+
+From the end of Lab 4, we see conflicting evidence about whether or not Theme is important in the model with Pieces to predict Amazon Price. We now want to do a test to compare a model that excludes theme to the full model that includes Theme. 
+
+Use mathematical notation to write out what the reduced model will be in this situation:
+
+> Insert Answer Here  $ $
+
+### Hypotheses
+
+Use mathematical notation AND complete sentences to state the null and alternative hypotheses for this test.
+
+$H_0: $ 
+
+> Sentence
+
+$H_A:$   
+
+> Sentence
+
+### Fit Reduced Model
+
+Fit the reduced model and display the results.
+
+```{r}
+# Provide R code and output/graphs
+
+```
+
+### Nested F Test
+
+Conduct the Nested F-test to test this hypothesis.
+
+```{r}
+# Provide R code and output/graphs
+
+
+```  
+
+### Conclusion
+
+Write a conclusion from this hypothesis test. Is Theme needed in the model?
+
+> Insert Answer Here  
+
+
+If Theme is needed in the model, which specific terms related to Theme seem to be important? Consider the individual t-tests for the full model to answer this question. What do these terms mean in the context of the problem? What differs by Theme; where do we NOT see differences by Theme?
+
+> Insert Answer Here  
+
+**NOTE: we will build models based on what is called the *hierarchy principle*, which means that if we have an interaction term in the model, we also need to include the main effects for those variables in the model. Therefore, even though the main effect of theme is not significant, we still need to keep it in the model since we have a significant interaction term. This would also be true for models with higher-order terms like quadratic effects; if we include a quadrati term we would also include the first-order term, even if it is not statistically significant.**
+
