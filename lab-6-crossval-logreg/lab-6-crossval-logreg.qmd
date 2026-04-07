@@ -1,0 +1,300 @@
+---
+title: 'Lab 6: Cross-Validation and Logistic Regression'
+format:
+  docx:
+    embed-resources: true
+    number-sections: true
+date: "`r Sys.Date()`"
+---
+
+## Name: 
+
+***
+<!-- Use these arrows and dashes to add a text comment that won't appear in the rendered file. This is different than a comment that goes in a code chunk, where you would use # -->
+
+<!-- The *** creates a small line to separate sections of your document -->
+
+<!-- While working on your lab, it might be easier to output to HTML instead of word. In the YAML in line 4, you can change "docx:" to "html:".  Just make sure to change it back to "html:" when rendering your final file to submit! -->
+
+<!-- **Please make sure to show all R code and output after each question so that I can see your work.**  Write a sentence for each numerical value produced describing its meaning **in context with the proper units**. -->
+
+<!-- **Be sure to follow all style guide suggestions (this may include fixing provided code)** -->
+
+```{r}
+#| label: setup
+#| include: false
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, warning = FALSE)
+
+# load all the packages you need here!
+
+
+# let's us use the select() and filter() functions
+library(dplyr)
+```
+***
+
+# Problem 1 - Interior Paint Additives
+An additive to interior paint has been recently developed that may greatly increase the ability of the paint to resist staining. An investigation was conducted to determine whether the additive is safe when exposed to children. Various amounts of the additive were fed to test animals and the number of animals developing liver tumors was recorded in the file paint.csv.
+
+## Research Question 
+State the statistical analysis research question for your analysis.
+
+> Insert Answer Here  
+
+
+## Response Variable
+Name the response variable of interest below and state the type (numeric, categorical)
+
+> Insert Answer Here  
+
+## Explanatory Variable(s)
+Name the explanatory variables of interest below and state the types (numeric, categorical)
+
+> Insert Answer Here  
+
+## Coefficients
+Read in the data and determine the coefficients for each variable in the model. (Be sure to investigate the structure of the data to determine how to build your analysis! Do you need to do any data cleaning? The 'mutate' function might be useful for creating a new variable.)
+
+```{r}
+# Provide R code and output/graphs
+
+# Read in data
+```
+
+## Interpretations
+Provide an interpretation of *each* parameter estimate in the context of the problem. Interpret the intercept using the Probability Model. Does the intercept make sense practically? Interpret the slope using both the Odds and the Probability Model.
+
+> Insert Answer Here  
+
+
+> Insert Answer Here  
+
+
+## Hypothesis Testing
+
+### State Hypotheses
+State the hypotheses (null and alternative) for the Logistic Regression Analysis mathematically and in a complete sentence.  Here are some symbols you may find useful to adapt: $\beta_1$ $\neq$
+
+> Insert Answer Here  
+
+
+> Insert Answer Here  
+
+
+### Wald Z-Test
+Conduct the appropriate analysis using the Wald Z-test and provide a written interpretation of the results in the context of the problem. Include your vital statistics (test statistic, significance level, and p-value) appropriately reported.
+
+```{r}
+# Provide R code and output/graphs
+```
+
+> Insert Answer Here  
+
+
+### Likelihood Ratio Test
+Conduct the appropriate analysis using the Likelihood Ratio Test and provide a written interpretation of the results in the context of the problem. Include your vital statistics (test statistic, degrees of freedom, significance level, and p-value) appropriately reported.
+
+```{r}
+# Provide R code and output/graphs
+```
+
+> Insert Answer Here  
+
+
+### Wald Z vs LRT
+Do your conclusions to the hypothesis tests in parts g and f agree or disagree? Are the results identical? Why or why not?
+
+> Insert Answer Here  
+
+
+
+# Problem 2 - Under-aged Drinking
+What happens when someone who is under-aged needs a ride home after a night of drinking?  The concern of the media today focuses on those who drive home in this situation.  However, what about those who ride with someone who has been drinking? We will examine what factors indicate a risk for riding home with a drinking driver (ride.alc.driver).  We will examine risk factors such as biological sex (female; female=1, 0=male), grade (grade; 9, 10, 11, 12), age (age4), ever tried to smoke (smoke; 1=yes, 0=no) (we will ignore driver's license).
+
+## Research Question
+State the statistical analysis research question for your analysis.
+
+> Insert Answer Here  
+
+
+## Response Variable
+Name the response variable of interest below and state the type (numeric, categorical)
+
+> Insert Answer Here  
+
+## Explanatory Variable(s)
+Name the explanatory variables of interest below and state the types (numeric, categorical)
+
+> Insert Answer Here  
+
+
+## Why Separate Models
+Researchers decide to consider separate models for age and grade.  
+
+Model 1: $ln \Big( \frac{p(y_{rad})}{1-p(y_{rad})} \Big) = \beta_0 + \beta_1 x_{grade} + \beta_2 x_{smoke} + \beta_3 x_{female}$
+
+Model 2: $ln \Big( \frac{p(y_{rad})}{1-p(y_{rad})} \Big) = \beta_0 + \beta_1 x_{age4} + \beta_2 x_{smoke} + \beta_3 x_{female}$
+
+What would motivate that decision? Explore the data to determine why.
+
+```{r}
+# Provide R code and output/graphs
+```
+
+> Insert Answer Here  
+ 
+
+## Model Selection
+
+Which model would you choose - the one including age or the one including grade? Justify your selection using relevant statistics from the model outputs for each model. I recommend comparing the models based on AIC values. (We will talk about how to do cross-validation for logistic regression at a later time.)
+
+```{r}
+# Provide R code and output/graphs
+```
+
+> Insert Answer Here  
+
+
+## Specific Hypotheses
+Use the selected model and state the SPECIFIC hypotheses (null and alternative) mathematically and in a complete sentence, for each parameter.  Here are some symbols you may find useful to adapt: $\beta_i$ $\neq$ $H_0$ $H_a$
+
+> Insert Answer Here  
+
+
+## Signifiance Tests
+Conduct the appropriate analysis for part 2.e. and provide a written interpretation of the results. Include your vital statistics (test statistic, degrees of freedom if applicable, alpha, and p-value) appropriately reported in parenthesis at the end of your statement.(Since the sample size is large, you can use the Wald Z-test.)
+
+```{r}
+# Provide R code and output/graphs
+```
+
+> Insert Answer Here  
+
+
+## Model Coefficients
+Determine the coefficients for each variable in the model and provide an interpretation of each slope in the context of the problem.  
+
+```{r}
+```
+
+> Insert Answer Here  
+
+
+## General Findings
+
+1.	Is there a difference between male and female youth and their choice to ride with a driver who has been drinking?
+
+> Insert Answer Here  
+
+
+2.	Is there evidence that older students make better decisions about driving with a drinking driver?
+
+> Insert Answer Here  
+
+
+3.	Are smokers more likely to ride with drivers who have been drinking?
+
+> Insert Answer Here  
+
+
+
+# Problem 3 - Cross-Validation for Lego Data
+
+In prior labs, we have considered the LEGO dataset, and whether or not Pieces or Unique Pieces was the better predictor of Amazon Price. Here is the information on the dataset again, as well as the data:
+
+The Lego dataset includes LEGO sets from all themes produced between January 1, 2018 and September 11, 2020. The data set in this problem is restricted to a random sample of 75 of the 1,304 LEGO sets posted on Brickset (Brickset, n.d.). Data was scraped from Brickset and merged with data scraped from BrickInstructions.com. Twenty-five sets were sampled from each of the City, Duplo, and Friends themes.  
+We are interested in answering the research question "Is the Amazon price explained by the number of pieces (either total pieces or unique pieces) in the Lego set, also considering differences in theme? We will start with the same `lego_clean` dataset.
+
+```{r}
+lego <- read.csv("lego_sample.csv")
+
+# we need to clean the levels of the categorical variables so they are easier to reference. For example, DUPLO is all caps and has a trademark logo in the original data
+
+lego_clean <- lego |>
+  janitor::clean_names() |>
+  # remove the trademark symbol from Duplo
+  mutate(theme = gsub("\\®", "", theme)) |>
+  mutate(theme = gsub("<ae>", "", theme)) |>
+  # make all theme names all lowercase AND store as a factor variable
+  mutate(theme = factor(tolower(theme))) |>
+  # remove the $ from retail and Amazon price, and make the variables numeric
+  mutate(price = as.numeric(gsub("\\$", "", price))) |>
+  mutate(amazon_price = as.numeric(gsub("\\$", "", amazon_price)))
+
+str(lego)
+```
+
+In lab 4, we built the following model: 
+
+$\hat{y}_{Amazon}=\hat{\beta}_0+\hat{\beta}_1x_{Pieces} + \hat{\beta}_2x_{Duplo} + \hat{\beta}_3x_{Friends} + \hat{\beta}_4x_{Pieces}x_{Duplo} + \hat{\beta}_5x_{Pieces}x_{Friends}$ 
+
+In lab 3, we had considered using Unique Pieces instead of Pieces to predict Amazon Price. Since the variables are collinear, they cannot appear in the model together. Here is the interaction model with Unique Pieces instead of Pieces:
+
+$\hat{y}_{Amazon}=\hat{\beta}_0+\hat{\beta}_1x_{Unique_Pieces} + \hat{\beta}_2x_{Duplo} + \hat{\beta}_3x_{Friends} + \hat{\beta}_4x_{Unique_Pieces}x_{Duplo} + \hat{\beta}_5x_{Unique_Pieces}x_{Friends}$ 
+
+We will now use Cross-Validation methods to compare these models and choose the best model for predicting LEGO set prices. 
+
+## Exploratory Data Analysis
+
+How many observations are in this dataset?  Store this value as the variable 'n'.
+```{r}
+# Insert R code/output here
+```
+
+Calculate the correlations of Pieces vs Amazon Price and Unique Pieces vs Amazon Price. Which set of variables has the higher correlation? Which do you think will be a better predictor of Amazon Price?
+
+```{r}
+# Insert R code/output here
+```
+
+> Insert Answer Here
+
+## Model Fitting
+
+Fit each linear model that we are considering. Make sure to use the appropriate function for model fitting that is needed for cross-validation. 
+
+```{r}
+# Insert R code/output here
+```
+
+## 5-Fold Cross-Validation
+
+Conduct 5-fold cross-validation for each model and output the average Test MSE.
+
+```{r}
+# Insert R code/output here
+```
+
+## Model Recommendation
+
+Which model would you recommend based on the 5-fold cross-validation results? Explain your answer. 
+
+> Insert Answer Here
+
+## LOOCV
+
+Conduct leave-one-out cross-validation for each model and output the average Test MSE.
+
+```{r}
+# Insert R code/output here
+```
+
+## Model Recommendation
+
+Which model would you recommend based on the leave-one-out cross-validation results? Does the decision align with your 5-fold cross-validation decision? Explain your answer. 
+
+> Insert Answer Here
+
+Does your decision about the best model align with what you expected when viewing the correlations of variables? Explain your answer.
+
+> Insert Answer Here
+
+## Setting Seeds
+
+Why did we need to set a seed for k-fold cross-validation but not for LOOCV?
+
+> Insert Answer Here
+
+***
+
+The End.
