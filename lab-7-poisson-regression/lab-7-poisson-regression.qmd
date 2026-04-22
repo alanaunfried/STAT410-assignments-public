@@ -1,0 +1,350 @@
+---
+title: 'Lab 7: Poisson Regression'
+format:
+  docx:
+    embed-resources: true
+    number-sections: true
+date: "`r Sys.Date()`"
+---
+
+## Name: 
+
+***
+<!-- Use these arrows and dashes to add a text comment that won't appear in the rendered file. This is different than a comment that goes in a code chunk, where you would use # -->
+
+<!-- The *** creates a small line to separate sections of your document -->
+
+<!-- While working on your lab, it might be easier to output to HTML instead of word. In the YAML in line 4, you can change "docx:" to "html:".  Just make sure to change it back to "html:" when rendering your final file to submit! -->
+
+<!-- **Please make sure to show all R code and output after each question so that I can see your work.**  Write a sentence for each numerical value produced describing its meaning **in context with the proper units**. -->
+
+<!-- **Be sure to follow all style guide suggestions (this may include fixing provided code)** -->
+
+
+```{r}
+#| label: setup
+#| include: false
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, warning = FALSE)
+
+# load all the packages you need here
+```
+
+# Problem 1: Wool Type and Warp Breaks
+Consider the `warpbreaks` data set, which is included with R. The data set gives the results of an experiment to determine the effect of wool type (A or B) and tension (low, medium or high) on the number of warp breaks per loom. Data was collected for nine looms for each combination of settings. To view more information about the data set, enter help(warpbreaks). To view the data set, enter the data set name:
+
+```{r}
+data("warpbreaks")
+```
+
+## Explore the Data
+Provide appropriate summary statistics and graphics. Note - since the explanatory variables are categorical, boxplots and other plots might be more appropriate than scatterplots.
+```{r}
+# Provide R code and output/graphs
+#gf_boxplot(y ~ x1, fill = ~x2, data = mydata)
+```
+
+
+Here is an *interaction plot* as a reference, which might be familiar to some from STAT 325, and might provide some interesting insights into the data since the explanatory variables are both categorical
+
+```{r}        
+warpbreaks |> 
+  gf_point(log(breaks) ~ tension, color = ~wool, size = 2,
+           position = position_jitter(width = 0.1)) |> 
+  gf_line(log(breaks) ~ tension, color = ~wool,
+          group = ~wool, stat = "summary", size = 1.5) +
+  labs(x = "Tension Level (Low, Med, High)",
+       y = "Number of Breaks",
+       color = "Wool Type") +
+  theme_light() +
+  scale_color_viridis_d(end = 0.85) +
+  theme(legend.position = "bottom")
+```
+
+What do you notice about the relationships between the explanatory and response? How will this impact the model you build?  
+
+>Insert Answer Here
+
+
+Suppose that you want to build a model to see how the frequency of warp breaks is effected by wool type, wool tension and the interaction between the two.
+
+As the response variable breaks is a count, it is best modeled as a Poisson distributed variable.
+  
+## Build the Model
+
+Build a poisson regression model to predict breaks. The model should have terms for the wool type, wool tension and the interaction between the two.
+```{r}
+# Provide R code and output/graphs
+
+```
+
+## General Hypothesis
+
+Evaluate the model significance using both general hypotheses. 
+
+### Hypotheses
+
+Write out the hypotheses symbolically for both null and alternative. Reference old labs if you forget how to write the mathematical notation! )
+
+> Insert Answer Here (general hypotheses)
+
+$H_0:$
+
+$H_1:$ 
+            
+### Significance testing
+
+Use the summary function to view the model results:
+
+```{r}
+# Provide R code and output/graphs
+```
+
+Conduct the appropriate Likelihood Ratio Test to test the general hypothesis. Write a formal conclusion to the hypothesis test.
+
+```{r}
+# Provide R code and output/graphs
+```  
+
+> Insert Answer Here 
+            
+            
+## Specific Hypotheses
+
+Evaluate the individual parameters significance using specific hypotheses. 
+
+### Hypotheses
+
+Write out each hypotheses symbolically for both null and alternative. Reference old labs if you forget how to write the mathematical notation! *Since there are many parameters, just write out the hypotheses for woolB and the interaction between Wool and TensionM.*
+
+> Insert Answer Here (specific hypotheses)
+
+For each parameter you are testing:  
+$H_0: $
+            
+$H_1: $   
+
+
+
+### Significance testing
+
+Conduct the appropriate Wald Z-tests for the specific hypothesis. Write a formal conclusion to the hypothesis tests. *Since there are many parameters, just write out the hypotheses for woolB and the interaction between Wool and TensionM.*
+
+```{r}
+# Provide R code and output/graphs
+```  
+
+> Insert Answer Here 
+
+
+
+            
+## Model Fit 
+
+Evaluate the model fit. Is there evidence of overdispersion? If so, correct the standard errors and re-evaluate general and specific hypotheses from previous sections.
+
+```{r}
+# Provide R code and output/graphs
+```
+
+> Is there evidence of overdispersion? Answer here. 
+
+> If SE's need to be adjusted, briefly reinterpret hypothesis tests here. 
+
+
+
+## Parameter Estimates
+
+Interpret the parameter estimates for main effects from this model. Interaction complicates interpretations of main effects; you can ignore this complication when interpreting main effects. (You do not need to include interpretations for the interaction terms.)
+
+> WoolB: 
+
+> TensionM and TensionH: 
+
+
+# Problem 2 - Skin Cancer
+Consider the data set giving the incidence of non-melanoma skin cancer among women in Minneapolis/St. Paul by age group.  The data set `SKinCancer Minneapolis` contains data on age groups that have been given a value near the midpoint of each group so that it can be treated as a numerical variable and not a categorical variable.
+
+## Read in the data
+
+Also view the structure of the data and print the head of the data.
+
+```{r }
+# Provide R code and output/graphs
+skin <- 
+```  
+
+
+## Explore the Data
+Provide appropriate summary statistics and graphics.
+
+```{r }
+# Provide R code and output/graphs
+```  
+
+
+What do you notice about the relationships between the explanatory and response? How will this impact the model you build?  
+
+>Insert Answer Here
+
+
+
+## Build the Model
+
+Consider age to be a continuous variable and model the non-melanoma skin cancer incidence as a function of age.  Do not forget to include the population size as an exposure offset in your model.  
+  
+```{r}
+# Provide R code and output/graphs
+skin_model <- 
+```  
+
+## General Hypothesis
+Test the general hypothesis for this model using the likelihood ratio test.       
+
+### Hypothesis
+
+> Insert Hypotheses Here
+        
+$H_0: $
+
+$H_1:$ 
+
+### Significance Test
+
+Conduct the appropriate Likelihood Ratio Test to test the general hypothesis. Write a formal conclusion to the hypothesis test.
+
+```{r}
+# Provide R code and output/graphs
+```
+
+> Insert Conclusion Here 
+
+## Specific Hypothesis Test
+
+Test the hypothesis that age is a significant predictor of skin cancer occurrence rates using the Wald Z-test. Has our hypothesis changed from the general hypothesis? Why or why not? 
+
+> Insert Answer Here
+
+
+## Parameter Estimate
+
+Interpret the age coefficient in the context on the problem.
+
+> Insert Answer Here
+
+
+
+## Model Fit
+
+One of the ways to check a Poisson Model fit is to plot the observed case counts (only possible when you have multiple observations per group) with the fitted/predicted case counts.  Note, that a linear relationship is assumed between each explanatory variable and the log() of the response variable (which is the link function). Here is an example:
+
+
+```{r}
+# plot of relationship
+gf_point(log(cases) ~ age, data = skin, color = "purple",
+         size = 3,
+         xlab = "Age Midpoint",
+         ylab = "Log of Cases of Skin Cancer") |> 
+  gf_point(log(fitted(skin_model)) ~ age, color = "green",
+           pch = "P", size = 3) |> 
+  gf_line(log(fitted(skin_model)) ~ age, size = 1.2, color = "green") +
+  labs(title = "Skin Cancer Incidence by Age with Predicted (P) Values") + 
+  theme_light() 
+```
+
+How well does the model fit?  Do you think a linear model is appropriate?
+
+> Insert Answer Here  
+
+
+## Model Improvement
+
+Try to improve your model.  Consider adding age^2 and/or age^3 to your model. Recreate the plot for each new model to evaluate the model fit.  
+
+
+```{r}
+# create new variables
+
+
+# Model with Age^2
+
+
+# New plot
+
+
+
+# Model with Age^3
+
+
+# New plot
+```
+
+Which model do you think is the best? Consider measures such as AIC, overdispersion, and significance testing. Explain your choice.
+
+> Insert Answer Here using Code and Output Provided
+
+
+## Nested Test
+
+Conduct a Drop-In-Deviance test to confirm that the model you selected is the best model of the options discussed here (first order, second order, third order). Write a conclusion for the hypothesis test. 
+
+```{r}
+# test for cubed term
+
+# test for squared term
+```
+
+> Insert Answer Here
+
+# Problem 3 - Skin Cancer Model Expansion
+The dataset `Skin Cancer MN_TX` contains additional data for women in the Dallas-Forth Worth Area.  Create a model using both location and age and an interaction term to estimate the incidence rate for skin cancer.  
+
+
+```{r}
+# code provided for you!
+skin_tx <- read.csv("Skin Cancer MN_TX.csv")
+
+skin_tx <- skin_tx |>
+  janitor::clean_names() |>
+  mutate(l_cases = log(population))
+```
+
+```{r}
+# model
+skin_loc <- glm(cases ~ age_midpoint * town + offset(l_cases), family = poisson, data = skin_tx)
+summary(skin_loc)
+```
+
+Here is a graph with the predicted values and the original observations:
+```{r}
+# plot of relationship
+gf_point(log(cases) ~ age_midpoint, data = skin_tx,
+         shape = ~town, color = ~town, 
+         size = 3,
+         xlab = "Age Midpoint",
+         ylab = "Log of Cases of Skin Cancer") |> 
+  gf_point(log(fitted(skin_loc)) ~ age_midpoint, color = ~town,
+           pch = "P", size = 3) |> 
+  gf_line(log(fitted(skin_loc)) ~ age_midpoint, 
+          color = ~town, size = 1.2) +
+  scale_color_viridis_d(end = 0.85) +
+  labs(color = "Town",
+       title = "Skin Cancer Incidence by Age with Predicted (P) Values") + 
+  theme_light() +
+  guides(shape = "none") +
+  theme(legend.position = "bottom") 
+```
+
+Answer the following questions: 
+
+1) Does one city have a higher risk of non-melanoma skin cancer for women than the other? 
+
+> Insert Answer Here 
+
+2) Should we modify the model at all?  How? (You do not actually need to do the modification; just say what you recommend.)
+
+> Insert Answer Here 
+
+
+3) Is there an interaction between age and location? Does this make sense (have a reasonable explanation)? Explain.
+
+> Insert Answer Here 
