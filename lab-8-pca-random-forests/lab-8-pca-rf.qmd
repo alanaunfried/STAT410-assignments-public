@@ -1,0 +1,317 @@
+---
+title: 'Lab 8: Principal Component Analysis and Random Forests'
+format:
+  docx:
+    embed-resources: true
+    number-sections: true
+date: "`r Sys.Date()`"
+---
+
+## Name: 
+
+***
+<!-- Use these arrows and dashes to add a text comment that won't appear in the rendered file. This is different than a comment that goes in a code chunk, where you would use # -->
+
+<!-- The *** creates a small line to separate sections of your document -->
+
+<!-- While working on your lab, it might be easier to output to HTML instead of word. In the YAML in line 4, you can change "docx:" to "html:".  Just make sure to change it back to "html:" when rendering your final file to submit! -->
+
+<!-- **Please make sure to show all R code and output after each question so that I can see your work.**  Write a sentence for each numerical value produced describing its meaning **in context with the proper units**. -->
+
+<!-- **Be sure to follow all style guide suggestions (this may include fixing provided code)** -->
+
+```{r}
+#| label: setup
+#| include: false
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, warning = FALSE)
+
+# load all the packages you need here
+library(tidyverse)
+library(janitor)
+```
+
+# PCA: Grades
+
+There are several ways to measure a student's understanding of statistics in an introductory course. The data set `Grades` contains total scores for students homework, labs, quizzes, projects, and exams. This course had two 1-hour exams and a 3-hour final. In addition to a final project worth 20% of the final grade there was an initial small project worth only 5% of the final grade. The exams were fairly standard statistics exams, but both projects required students to read peer-reviewed research projects, collect their own data, conduct and appropriate statistical analysis, and present their results. While several students in this introductory class had seen a little statistics in previous courses, this was typically the first time students were asked to read journal articles or conduct a realistic research project. Here are the results of the PCA analysis.
+
+## **Add comments and name code chunks to indicate what EACH chunk below produces.**
+
+```{r}
+Grades <- read.csv("Grades.csv")
+fit <- princomp(Grades[, 2:9], cor = TRUE, score = TRUE)
+summary(fit)
+```
+
+```{r}
+plot(fit, type = "lines", main = "Scree Plot")
+```
+
+```{r}
+loadings(fit)
+```
+
+```{r}
+cor(Grades[, 2:9], fit$scores)
+```
+
+```{r}
+biplot(fit)
+abline(h = 0) # adds x-axis
+abline(v = 0) # adds y-axis
+```
+
+## Interpret the First Princpal Component
+
+Which variables have large loadings/correlations with PC1? Write a general interpretation of the first principal component.
+
+> Insert Answer Here
+
+## Interpret the Second Principal Component
+
+Which variables have large loadings/correlations with PC2? Write a general interpretation of the first principal component.
+
+> Insert Answer Here
+
+## Weighted Average vs. PC
+
+We often use a weighted average for a final grade - explain how principal component one could be used instead of a weighted average grade for assessment of student effort.
+
+> Insert Answer Here
+
+## Project 1 Interpretation
+
+Project 1 was the first research project in the course. What does PC2 tell us about a students initial comfort with statistical research in the class?
+
+> Insert Answer Here
+
+# Intelligence
+
+Measuring intelligence is another area where a principal component analysis is often used. There is not just one test that can be used to accurately measure a person's intelligence - there are several tests that known to be related to intelligence. Often intelligence tests can be classified into three groups: spatial reasoning, vocabulary, and memory. PCA is used to combine multiple measurements into an overall measure of intelligence. Psychologists call the first component the general intelligence factor, or "g-score".
+
+**Add comments and name code chunks to indicate what each chunk below produces.**
+
+```{r}
+intel <- read.csv("Intelligence.csv")
+fit <- princomp(intel[, -1], cor = T, score = T)
+summary(fit)
+```
+
+```{r}
+plot(fit, type = "lines", main = "Scree Plot")
+```
+
+```{r}
+loadings(fit)
+```
+
+```{r}
+cor(intel[, -1], fit$scores)
+```
+
+```{r}
+biplot(fit)
+abline(h = 0) # adds x-axis
+abline(v = 0) # adds y-axis
+```
+
+## Interpreting the G-Score
+
+The data set `Intelligence` contains test results for 214 people who have taken several intelligence tests. Use PCA to find the "g-score". Interpret the loadings and correlations for PC1 (the "g-score"). How much of the total variability in the several measures of intelligence is explained by the g-score?
+
+> Insert Answer Here
+
+## Ethical use of G-Score
+
+Stephen Jay Gould pointed out, intelligence testing and principal component analysis have been used to offer a "scientific" basis for racist, classist, and sexist theories of "intelligence", specifically for excluding specific immigrant groups at Ellis Island. Explain why intelligence tests (such as vocabulary tests) may have biased results in this situation. Explain generally why the g-score may not accurately describe an overall intelligence measure for all populations using statistical reasoning.
+
+> Insert Answer Here
+
+# Decision Trees and Random Forests: Lego Data
+
+In prior labs, we have considered the LEGO dataset, and whether or not Pieces or Unique Pieces was the better predictor of Amazon Price,  in addition to Lego theme. Here is the information on the dataset again, as well as the data:
+
+The Lego dataset includes LEGO sets from all themes produced between January 1, 2018 and September 11, 2020. The data set in this problem is restricted to a random sample of 75 of the 1,304 LEGO sets posted on Brickset (Brickset, n.d.). Data was scraped from Brickset and merged with data scraped from BrickInstructions.com. Twenty-five sets were sampled from each of the City, Duplo, and Friends themes.  
+
+
+```{r}
+lego <- read.csv("lego_data.csv")
+
+# we clean the ames and then select a group of variables that do not suffer from missing data to use in this analysis. We then filter down to considering the same 3 themes we have explored all semester, and we make the theme and ages variables factors. Finally, we drop any remaining rows with missing data.
+
+# Note that decision trees expect no missing data, so we have to drop any rows with missing data. We also have to make sure that all categorical variables are factors for the analysis to run.
+
+lego_clean <- lego |>
+  clean_names() |>
+  dplyr::select(theme, pieces, unique_pieces, pages, year, ages, price, amazon_price) |>
+  filter(theme == "City" | theme == "DUPLO" | theme == "Friends") |>
+  mutate(theme = factor(theme)) |>
+  mutate(ages = factor(ages)) |>
+  drop_na()
+
+str(lego)
+```
+
+## **Add comments and name code chunks to indicate what EACH chunk below produces.**
+
+## Regression Tree
+
+We are once again interested in exploring how the Amazon price is explained by the number of pieces (either total pieces or unique pieces) in the Lego set, also considering differences in theme and possibly other explanatory variables. 
+
+Recall that in past labs, we found interaction between number of pieces and theme. 
+
+### Fit the Tree
+
+Fit a regression tree using a training set.
+
+```{r}
+library(tree)
+library(MASS)
+
+set.seed(41001)
+train <- sample(1:nrow(lego_clean), nrow(lego_clean)/2)
+lego_test <- lego_clean[-train, "amazon_price"]
+
+reg_tree_lego <- tree(amazon_price ~ theme + pieces + unique_pieces + pages + year + ages, lego_clean, subset = train)
+
+reg_tree_lego
+
+summary(reg_tree_lego)
+```
+
+### Plot the tree
+
+Write the code to plot the tree and to add the appropriate text. 
+
+```{r}
+# Provide R code and output/graphs
+
+```
+
+#### How many terminal nodes are in this tree?
+
+> Insert Answer Here
+
+### Prune the Tree
+
+#### Cross-Validation
+
+First, conduct cross-validation to see whether pruning the tree will improve performance.
+
+```{r}
+cv_lego <- cv.tree(reg_tree_lego)
+plot(cv_lego$size, cv_lego$dev, type = "b")
+```
+
+#### How many terminal nodes are suggested by cross-validation for the final tree?
+
+> Insert Answer Here
+
+#### Based on the recommended number of nodes from cross-validation, should we prune the tree or not? Justify your answer.
+
+> Insert Answer Here
+
+#### Tree Pruning
+
+Regardless of your previous answer, we will prune the tree to 5 terminal nodes. 
+
+```{r}
+prune_lego <- prune.tree(reg_tree_lego, best = 5)
+
+plot(prune_lego)
+text(prune_lego, pretty = 0)
+
+```
+
+### Regression  Tree Interpretations
+
+#### What is the most important variable in the final tree with 5 nodes? How do you know?
+
+> Insert Answer Here
+
+#### What is the predicted Amazon price for a Lego set with 700 pieces, for ages 8+, and in the City theme? How do you know?
+
+> Insert Answer Here
+
+
+## Random Forests
+
+We will now explain the same research question using a random forest, which generates multiple trees and averages them, instead of using one decision tree. 
+
+### Fit the Random Forest
+
+Remember in  random forest, for each tree that is generated we 1) use a sample of the data and 2) only consider a random subset of the predictors when making splits. 
+
+By default, the randomForest function will use p/3 predictors for regression trees, where p is the total number of predictors available. We can change this using the `mtry` option. Below, we fit a random forest model using 3 predictors for each tree.
+
+```{r}
+library(randomForest)
+
+set.seed(41002)
+
+#the "." in the model below says to consider all possible predictors in the model, rather than specifying predictors to use
+rf_lego_3 <- randomForest(amazon_price ~ ., mtry = 3, data = lego_clean, subset = train, importance = TRUE, na.action = na.omit)
+rf_lego_3
+
+```
+
+#### Now write code using all 7 available preditors from the lego_clean dataset (theme, pieces, unique_pieces, pages, year, ages, price) instead of 3 predictors. 
+
+(Note that this is technically called "bagging", which is a special case of a random forest model.)
+
+```{r}
+# Provide R code and output
+
+rf_lego_7...
+
+```
+
+#### Compare the percent of variance explained by the two models. Compare the variance explained by each model. Does one seem to do better than the other for this dataset?
+
+> Insert Answer Here
+
+### Performace with Test Data
+
+Below, we predict the Amazon price for the test data using the random forest model with 3 predictors predictors. We then calculate the mean squared error of our predictions.
+```{r}
+
+yhat_rf_3 <- predict(rf_lego_3, newdata = lego_clean[-train, ]) 
+
+mean((yhat_rf_3 - lego_test)^2)
+
+```
+
+#### Write code to do the same calculations for the model with 7 possible predictors. 
+```{r}
+# Provide R code and output/graphs
+
+yhat_rf_7...
+
+
+```
+
+#### Compare the mean squared error for the two models. Does one seem to do better than the other for this dataset?
+
+> Insert Answer Here
+
+### Variable Importance
+
+We can look at the "importance" of each variable in the random forest model, including graphs of importance. A higher `%IncMSE` means a higher decrease in prediction accuracy when the variable is excluded. (This means a higher %IncMSE means a more important variable). A higher `IncNodePurity` means a higher decrease in node impurity when the variable is included in the model. (This means a higher IncNodePurity means a more important variable).
+
+```{r}
+importance(rf_lego_3)
+varImpPlot(rf_lego_3)
+
+importance(rf_lego_7)
+varImpPlot(rf_lego_7)
+
+```
+
+#### From either model, what 2 variables appear to be the most important in predicting Amazon Price?
+
+> Insert Answer Here
+
+#### With the random forest model, we did not create a visual diagram like we did for a decision tree. Why is this not possible with a random forest model?
+
+> Insert Answer Here
+
+# Congrats! You finished your final STAT 410 lab!
